@@ -2,12 +2,9 @@ import { Map as OlMap, View } from 'ol'
 import { transform } from 'ol/proj'
 import { defaults } from 'ol/interaction'
 
-import Utils from '../../Utils'
+import Utils from '../../../Utils'
+import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM, DEFAULT_MAP_PROJECTION, DEFAULT_MAP_SOURCE_PROJECTION } from '../constant'
 
-const DEFAULT_MAP_CENTER = [0, 0]
-const DEFAULT_MAP_ZOOM = 8
-const DEFAULT_MAP_PROJECTION = 'EPSG:3857'// 坐标展示投影
-const DEFAULT_MAP_SOURCE_PROJECTION = 'EPSG:4326'// 坐标源投影
 
 /**
  * @description 地图基类

@@ -1,0 +1,108 @@
+// 鼠标移动经纬度
+.custom-mouse-position {
+    position: absolute;
+    font-size: 12px;
+    bottom: 30px;
+    left: 20px;
+    color: #000;
+    text-shadow: 0 0 40px #fff;
+
+    span {
+        display: inline-block;
+        width: 150px;
+    }
+}
+
+// 缩放比例尺
+.ol-scale-line {
+    position: absolute !important;
+    bottom: 65px;
+    left: 20px;
+    background-color: transparent;
+    display: flex;
+
+    &::before {
+        content: "比例尺:";
+        transform: scale(0.68);
+        transform-origin: 0;
+        display: block;
+        // margin-right: 8px;
+    }
+
+    .ol-scale-line-inner {
+        border: none;
+        border-bottom: 1px solid #0aebff;
+        position: relative;
+        color: #0aebff;
+        text-align: center;
+
+        &::before {
+            content: "";
+            height: 8px;
+            width: 1px;
+            background-color: #0aebff;
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+        }
+
+        &::after {
+            content: "";
+            height: 8px;
+            width: 1px;
+            background-color: #0aebff;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+        }
+    }
+}
+
+// 缩略图
+.custom-ol-overview {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+
+    &.ol-uncollapsible {
+        bottom: auto;
+        left: auto;
+        bottom: 80px;
+        left: 10px;
+    }
+
+    &:not(.ol-collapsed) {
+        .ol-overviewmap-map {
+            visibility: hidden;
+        }
+    }
+
+    &.ol-collapsed {
+        .ol-overviewmap-map {
+            border: 1px solid red;
+        }
+    }
+
+    .ol-overviewmap-map {
+        border: none;
+        width: 200px;
+        height: 100px;
+    }
+
+    .ol-overviewmap-box {
+        border: 1px solid rgb(0, 208, 255);
+        border-radius: 2px;
+    }
+
+    &:not(.ol-collapsed) button {
+        bottom: auto;
+        left: auto;
+        right: 1px;
+        top: 1px;
+    }
+
+    .ol-rotate {
+        top: 170px;
+        right: 0;
+    }
+}
