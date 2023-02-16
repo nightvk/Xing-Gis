@@ -24,6 +24,8 @@ export interface SimplePointType {
 export interface SimplePointOptions {
     layer?: string | VectorLayer<VectorSource<Geometry>>
     toolTip?: {
+        /** 只有传 false 才不展示,不传也会展示 */
+        show?: boolean
         class?: string
         text?: string
     }
@@ -47,7 +49,7 @@ export interface SimplePointOptions {
 export default class SimplePoint {
     public id: string | number = ''
     public name: string = ''
-    public coordinates: [number, number] = [0, 0]
+    public coordinate: [number, number] = [0, 0]
     public feature: Feature<Point> = new Feature()
 
     private options: SimplePointOptions = {}
@@ -57,7 +59,7 @@ export default class SimplePoint {
         const { id, name, coordinate, options } = point
         this.id = id ?? name
         this.name = name
-        this.coordinates = coordinate
+        this.coordinate = coordinate
         this.options = options ?? {}
         this.initGeometry()
     }
@@ -90,7 +92,7 @@ export default class SimplePoint {
     * @desc 构建初始点
     */
     private initGeometry = () => {
-        const geometry = new Point(fromLonLat(this.coordinates))
+        const geometry = new Point(fromLonLat(this.coordinate))
         this.feature.setGeometry(geometry)
         this.feature.setStyle(this.getStyle())
         this.feature.set('target', this.options.source)
@@ -137,7 +139,7 @@ export default class SimplePoint {
         const { id, name, coordinate, options } = point
         this.id = id ?? name
         this.name = name
-        this.coordinates = coordinate
+        this.coordinate = coordinate
         this.options = options ?? {}
         this.initGeometry()
         return this
@@ -147,14 +149,16 @@ export default class SimplePoint {
      * @desc 移入显示name
      */
     private pointerMoveIn = (e: MapBrowserEvent<any>, target: Record<string, any>) => {
-        let { text = this.name } = this.options.toolTip ?? {}
+        let { text = this.name, show = true } = this.options.toolTip ?? {}
 
-        const ele = document.createElement('div')
-        ele.className = `ol-map-tooltip ${this.options.toolTip?.class ?? ''}`
-        ele.innerHTML = text
+        if (show) {
+            const ele = document.createElement('div')
+            ele.className = `ol-map-tooltip ${this.options.toolTip?.class ?? ''}`
+            ele.innerHTML = text
 
-        MapUtil.tooltipOverlay.setElement(ele)
-        MapUtil.tooltipOverlay.setPosition(e.coordinate)
+            MapUtil.tooltipOverlay.setElement(ele)
+            MapUtil.tooltipOverlay.setPosition(e.coordinate)
+        }
     }
 
     /**

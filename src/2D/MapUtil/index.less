@@ -107,8 +107,9 @@
     }
 }
 
-// tooltip
-.ol-map-tooltip {
+// tooltip 菜单
+.ol-map-tooltip,
+.ol-map-menus {
     padding: 6px 6px;
     border-radius: 2px;
     color: #fff;
@@ -116,4 +117,26 @@
     border: 1px solid fade(#0aebff, 30%);
     line-height: 1;
     font-size: 12px;
+}
+
+.ol-map-menus {
+    border-radius: 2px;
+    background: fade(#1f3983, 70%);
+    border: 1px solid fade(#0aebff, 30%);
+    font-size: 12px;
+    line-height: 1;
+
+    &>div {
+        color: #fff;
+        padding: 6px 6px;
+        cursor: pointer;
+
+        &:hover {
+            background: #0aebff;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 }

@@ -27,7 +27,10 @@ export default abstract class Event {
         map.on('pointermove', this.pointerMoveIn)
         // @ts-ignore
         map.on('contextmenu', this.contextmenuClick)
-        map.on('movestart', () => { this.isMoveing = true })
+        map.on('movestart', () => {
+            this.isMoveing = true;
+            MapUtil.menuOverlay.setElement(undefined)
+        })
         map.on('moveend', () => { this.isMoveing = false })
     }
     /**
@@ -43,6 +46,7 @@ export default abstract class Event {
      */
     private static singleClick = (e: MapBrowserEvent<any>) => {
         const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
+        MapUtil.menuOverlay.setElement(undefined)
         if (Utils.isExist(feature)) {
             const func = feature?.get('singleClick')
             const target = feature?.get('target') ?? {}
@@ -66,9 +70,9 @@ export default abstract class Event {
      * @desc 右键
      */
     private static contextmenuClick = (e: MapBrowserEvent<any>) => {
-        e.originalEvent.stopPropagetion()
-        e.originalEvent.preventDefault()
-
+        e.originalEvent?.stopPropagation()
+        e.originalEvent?.preventDefault()
+        MapUtil.menuOverlay.setElement(undefined)
         const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
 
         if (Utils.isExist(feature)) {
@@ -87,7 +91,7 @@ export default abstract class Event {
         const map = MapUtil.get().map
         const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
         const mapEle = map.getTargetElement()
-       
+
         this.pointerMoveOut(e)
 
         if (Utils.isExist(feature)) {

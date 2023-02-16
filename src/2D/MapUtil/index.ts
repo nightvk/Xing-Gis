@@ -20,9 +20,14 @@ export default abstract class MapUtil {
 
     static instance: Map
     /**
-     * @desc 地图全局 tooltip 提示框
+     * @desc 地图全局 唯一 tooltip 提示框
      */
     static tooltipOverlay = new Overlay({ offset: [15, 10] })
+
+    /**
+    * @desc 地图全局 唯一 菜单
+    */
+    static menuOverlay = new Overlay({ offset: [15, 10] })
 
     /**
      * 新建地图
@@ -37,6 +42,7 @@ export default abstract class MapUtil {
 
         this.instance = new Map(container, center)
         this.instance.map.addOverlay(this.tooltipOverlay)
+        this.instance.map.addOverlay(this.menuOverlay)
 
         Event.init()
 
