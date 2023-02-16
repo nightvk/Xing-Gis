@@ -152,7 +152,7 @@ export default class ComplexPoint {
     }
 
     /**
-     * @desc 显示
+     * @desc 显示TODO
      */
     public show = () => {
         this.feature.setStyle(this.getStyle())
@@ -162,6 +162,13 @@ export default class ComplexPoint {
     * @desc 隐藏
     */
     public hidden = () => {
+        this.feature.setStyle(new Style())
+    }
+
+    /**
+    * @desc 激活 TODO
+    */
+    public active = () => {
         this.feature.setStyle(new Style())
     }
 

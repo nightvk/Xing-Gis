@@ -97,6 +97,25 @@ export default function Map2D() {
                     }
                 }
             }
+        })
+
+        PortController.draw({
+            id: 6,
+            name: '左键双击菜单',
+            coordinate: [107.06, 31.67],
+            options: {
+                icon: { src: PortIcon },
+                toolTip: { show: false },
+                events: {
+                    doubleClick: {
+                        callback: () => console.log('双击左键的同时出现菜单'),
+                        menus: [
+                            { label: '菜单1', event: (e: any, target: any) => console.log('点击了菜单1', e, target) },
+                            { label: '菜单2', event: (e: any, target: any) => console.log('点击了菜单2', e, target) },
+                        ],
+                    }
+                }
+            }
 
         })
 

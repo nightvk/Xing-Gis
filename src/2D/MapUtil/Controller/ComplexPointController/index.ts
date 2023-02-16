@@ -75,6 +75,13 @@ export default class SimplePointController {
     }
 
     /**
+     * @desc 激活
+     */
+    public active = (id: string | number) => {
+        this.store.get(id)?.active()
+    }
+
+    /**
     * @desc 清空
     */
     public clear = () => {
