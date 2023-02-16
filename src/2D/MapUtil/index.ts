@@ -6,7 +6,7 @@ import Overlay from 'ol/Overlay'
 import { MousePosition, OverviewMap, ScaleLine } from 'ol/control'
 
 import Map from './Map'
-import Event from './Event'
+import Event from './Events'
 import AuxiliaryUtils from './AuxiliaryUtils'
 import { DEFAULT_MAP_SOURCE_PROJECTION, MAP_TILE_LAYER_NAME } from './constant'
 import Utils from '../../Utils'
@@ -22,7 +22,7 @@ export default abstract class MapUtil {
     /**
      * @desc 地图全局 tooltip 提示框
      */
-    static tooltipOverlay = new Overlay({})
+    static tooltipOverlay = new Overlay({ offset: [15, 10] })
 
     /**
      * 新建地图
