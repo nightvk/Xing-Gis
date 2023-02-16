@@ -52,8 +52,8 @@ export default class SimplePoint {
     public coordinate: [number, number] = [0, 0]
     public feature: Feature<Point> = new Feature()
 
-    private options: SimplePointOptions = {}
-    private layer!: VectorLayer<VectorSource<Geometry>>
+    protected options: SimplePointOptions = {}
+    protected layer!: VectorLayer<VectorSource<Geometry>>
 
     constructor(point: SimplePointType) {
         const { id, name, coordinate, options } = point
@@ -167,4 +167,23 @@ export default class SimplePoint {
     private pointerMoveOut = () => {
         MapUtil.tooltipOverlay.setElement(undefined)
     }
+}
+
+// 继承!!!!
+
+interface ComplexPointOptions extends SimplePointOptions {
+    tst: string
+}
+
+interface ComplexPointType extends SimplePointType {
+    options?: ComplexPointOptions
+}
+
+
+class ComplexPoint extends SimplePoint {
+
+    constructor(point: ComplexPointType) {
+        super(point)
+    }
+
 }

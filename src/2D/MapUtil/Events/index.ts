@@ -9,7 +9,7 @@ export type EventType = 'singleClick' | 'doubleClick' | 'pointerMoveIn' | 'point
 /**
  * @desc 地图事件
  */
-export default abstract class Event {
+export default abstract class Events {
     // 地图是否正在移动
     private static isMoveing = false
 
@@ -19,26 +19,27 @@ export default abstract class Event {
     /**
      * @desc 地图事件初始化
      */
-    static init = () => {
+    public static init = () => {
         const map = MapUtil.get().map
 
-        map.on('click', this.singleClick)
-        map.on('dblclick', this.doubleClick)
-        map.on('pointermove', this.pointerMoveIn)
+        map.on('click', Events.singleClick)
+        map.on('dblclick', Events.doubleClick)
+        map.on('pointermove', Events.pointerMoveIn)
         // @ts-ignore
-        map.on('contextmenu', this.contextmenuClick)
+        map.on('contextmenu', Events.contextmenuClick)
         map.on('movestart', () => {
-            this.isMoveing = true;
+            Events.isMoveing = true;
             MapUtil.menuOverlay.setElement(undefined)
         })
-        map.on('moveend', () => { this.isMoveing = false })
+        map.on('moveend', () => { Events.isMoveing = false })
     }
+
     /**
      * @desc 清理
      */
-    static clear = () => {
-        this.isMoveing = false
-        this.eventFeature = undefined
+    public static clear = () => {
+        Events.isMoveing = false
+        Events.eventFeature = undefined
     }
 
     /**
@@ -85,18 +86,18 @@ export default abstract class Event {
      * @desc 移入
      */
     private static pointerMoveIn = (e: MapBrowserEvent<any>) => {
-        if (this.isMoveing === true) {
+        if (Events.isMoveing === true) {
             return false;
         }
         const map = MapUtil.get().map
         const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
         const mapEle = map.getTargetElement()
 
-        this.pointerMoveOut(e)
+        Events.pointerMoveOut(e)
 
         if (Utils.isExist(feature)) {
             mapEle.style.cursor = 'pointer'
-            this.eventFeature = feature
+            Events.eventFeature = feature
             const func = feature?.get('pointerMoveIn')
             const target = feature?.get('target') ?? {}
             func?.(e, target)
@@ -110,13 +111,11 @@ export default abstract class Event {
      * @desc 移出
      */
     private static pointerMoveOut = (e: MapBrowserEvent<any>) => {
-        if (Utils.isExist(this.eventFeature)) {
-            const func = this.eventFeature?.get('pointerMoveOut')
-            const target = this.eventFeature?.get('target')
+        if (Utils.isExist(Events.eventFeature)) {
+            const func = Events.eventFeature?.get('pointerMoveOut')
+            const target = Events.eventFeature?.get('target')
             func?.(e, target)
-            this.eventFeature = undefined
+            Events.eventFeature = undefined
         }
     }
-
 }
-
