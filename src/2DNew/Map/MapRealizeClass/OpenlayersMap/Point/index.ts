@@ -1,14 +1,12 @@
 
 import { Feature } from 'ol'
 import { Geometry, Point as OlPoint } from 'ol/geom'
-import VectorLayer from 'ol/layer/Vector'
-import VectorSource from 'ol/source/Vector'
 import { Style, Icon, Circle, Fill, Stroke } from 'ol/style'
 
 import Utils from '../../../../Utils'
 
 import type { PointOptionsType, PointType, PointLayerType } from './constant'
-
+import type { LayerType } from '../Layers/index'
 
 /**
  * 点
@@ -20,7 +18,7 @@ export default class Point {
     public feature: Feature<OlPoint> = new Feature()
 
     private options: PointOptionsType = {}
-    private layer!: VectorLayer<VectorSource<Geometry>>
+    private layer!: LayerType
 
     constructor(point: PointType) {
         const { id, name, coordinate, options } = point

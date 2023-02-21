@@ -1,4 +1,7 @@
 import { useEffect } from 'react'
+import MapControllerGenerator from './Map/MapControllerGenerator'
+
+
 import './index.less'
 
 
@@ -7,8 +10,13 @@ import './index.less'
 export default function Map2D() {
 
     useEffect(() => {
-        console.log(1111);
+        const MapController = MapControllerGenerator.createMapController('openlayers', document.getElementById('map-2d')!)
+        MapController.tool.setGrid(true)
+        MapController.tool.setMousePos(true)
+        MapController.tool.setOverviewMap(true)
+        MapController.tool.setScaleLine(true)
 
+        const pointGather = MapController.point.createGather()
     }, [])
 
 
@@ -19,17 +27,6 @@ export default function Map2D() {
         </div>
     )
 }
-
-
-// import AirportIcon from './images/airport.png'
-// import PortIcon from './images/port.png'
-
-// MapUtil.create('map-2d', [104.06, 30.67])
-// MapUtil.setOSMLayer()
-// MapUtil.setGrid(true)
-// MapUtil.setMousePos(true)
-// MapUtil.setOverviewMap(true)
-// MapUtil.setScaleLine(true)
 
 // const AirPortController = new SimplePointController('airport')
 

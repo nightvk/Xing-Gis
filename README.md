@@ -16,7 +16,7 @@
 不同地图使用不同地图的Icon
 
 # 封装逻辑
-顶层控制器                  const MapController = createMapController('baidu')
+顶层控制器                  const MapController =  createMapController('baidu')
 顶层逻辑控制器               const PointerController = MapController.createPointController('图层名')
 业务控制器                  const somePoint = PointerController.create({id:'',name:'',coordinate:[]})
 实体的实现                     new Point()
