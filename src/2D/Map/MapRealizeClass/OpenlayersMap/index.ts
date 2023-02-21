@@ -15,6 +15,7 @@ export default class OpenlayersMap extends MapConstraint {
         Tool.create(container, center, zoom)
         Tool.setOSMLayer()
         Tool.initOverlay()
+        Tool.changeIcon()
         Events.init()
     }
 

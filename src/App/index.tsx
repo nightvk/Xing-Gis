@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Select } from 'antd'
-import Map2D from '../2DNew'
+import Map2D from '../2D'
 import Map3D from '../3D'
 import './index.less'
 

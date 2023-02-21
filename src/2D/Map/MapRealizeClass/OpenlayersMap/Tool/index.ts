@@ -84,6 +84,10 @@ export default abstract class Tool extends MapToolConstraint {
         this.instance = map
     }
 
+    /** 改变图标 */
+    public static changeIcon = () => {
+        console.log('此处改变图标!TODO');
+    }
 
 
     /** 移动地图 */

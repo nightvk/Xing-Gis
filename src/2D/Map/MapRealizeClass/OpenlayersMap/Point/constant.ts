@@ -9,6 +9,9 @@ import type { Options as StrokeOptions } from 'ol/style/Stroke'
 import type { Options as CircleOptions } from 'ol/style/Circle'
 
 
+/** 散点的图层名 */
+export const SPLASHES_POINT_DEFAULT_LAYERNAME = 'SPLASHES_POINT_DEFAULT_LAYERNAME'
+
 /** 点的事件回调类型 */
 export type PointEventType = Function | {
     /** 弹窗面板的类名 */
@@ -35,7 +38,7 @@ export interface PointType {
     /** 坐标 */
     coordinate: [number, number]
     /** 配置项 */
-    options: PointOptionsType
+    options?: PointOptionsType
 }
 
 
@@ -55,9 +58,10 @@ export interface PointOptionsType {
     icon?: Partial<IconOptions>
     /** 绘制为点的基本属性 */
     circle?: {
+        radius: number
         fill: { color: string }
         stroke: Partial<StrokeOptions>
-    } & Omit<CircleOptions, 'stroke' | 'fill'>
+    } & Omit<CircleOptions, 'stroke' | 'fill' | 'radius'>
     /** 自定义绘制样式 */
     style?: Style
     /** 将原始数据缓存 */
@@ -75,3 +79,5 @@ export interface PointOptionsType {
         contextmenuClick?: PointEventType
     }
 }
+
+

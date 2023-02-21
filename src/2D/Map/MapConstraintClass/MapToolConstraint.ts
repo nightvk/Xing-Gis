@@ -7,6 +7,8 @@ export default abstract class MapToolConstraint {
     public abstract create: Function
     /** 销毁地图 */
     public abstract destory: Function
+    /** 销毁Icon */
+    public abstract changeIcon: Function
     /** 获取实例,建议所有获取地图实例都走此属性,以便于拦截 */
     public abstract get: () => any
     /** 移动地图 */

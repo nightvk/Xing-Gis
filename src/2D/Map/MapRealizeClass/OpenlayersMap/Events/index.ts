@@ -1,7 +1,7 @@
 import { FeatureLike } from 'ol/Feature'
 import MapBrowserEvent from 'ol/MapBrowserEvent'
-import Utils from '../../../Utils'
-import MapUtil from '../index'
+import Utils from '@/Utils'
+import Tool from '../Tool'
 
 
 export type EventType = 'singleClick' | 'doubleClick' | 'pointerMoveIn' | 'pointerMoveOut' | 'contextmenuClick'
@@ -20,7 +20,7 @@ export default abstract class Events {
      * @desc 地图事件初始化
      */
     public static init = () => {
-        const map = MapUtil.get().map
+        const map = Tool.get()
 
         map.on('click', Events.singleClick)
         map.on('dblclick', Events.doubleClick)
@@ -29,7 +29,7 @@ export default abstract class Events {
         map.on('contextmenu', Events.contextmenuClick)
         map.on('movestart', () => {
             Events.isMoveing = true;
-            MapUtil.menuOverlay.setElement(undefined)
+            Tool.menuOverlay.setElement(undefined)
         })
         map.on('moveend', () => { Events.isMoveing = false })
     }
@@ -46,12 +46,12 @@ export default abstract class Events {
      * @desc 单击
      */
     private static singleClick = (e: MapBrowserEvent<any>) => {
-        const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
-        MapUtil.menuOverlay.setElement(undefined)
+        const feature = Tool.get().forEachFeatureAtPixel(e.pixel, f => f)
+        Tool.menuOverlay.setElement(undefined)
         if (Utils.isExist(feature)) {
             const func = feature?.get('singleClick')
-            const target = feature?.get('target') ?? {}
-            func?.(e, target)
+            const source = feature?.get('source') ?? {}
+            func?.(e, source)
         }
     }
 
@@ -59,11 +59,11 @@ export default abstract class Events {
      * @desc 双击
      */
     private static doubleClick = (e: MapBrowserEvent<any>) => {
-        const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
+        const feature = Tool.get().forEachFeatureAtPixel(e.pixel, f => f)
         if (Utils.isExist(feature)) {
             const func = feature?.get('doubleClick')
-            const target = feature?.get('target') ?? {}
-            func?.(e, target)
+            const source = feature?.get('source') ?? {}
+            func?.(e, source)
         }
     }
 
@@ -73,13 +73,13 @@ export default abstract class Events {
     private static contextmenuClick = (e: MapBrowserEvent<any>) => {
         e.originalEvent?.stopPropagation()
         e.originalEvent?.preventDefault()
-        MapUtil.menuOverlay.setElement(undefined)
-        const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
+        Tool.menuOverlay.setElement(undefined)
+        const feature = Tool.get().forEachFeatureAtPixel(e.pixel, f => f)
 
         if (Utils.isExist(feature)) {
             const func = feature?.get('contextmenuClick')
-            const target = feature?.get('target') ?? {}
-            func?.(e, target)
+            const source = feature?.get('source') ?? {}
+            func?.(e, source)
         }
     }
     /**
@@ -89,8 +89,8 @@ export default abstract class Events {
         if (Events.isMoveing === true) {
             return false;
         }
-        const map = MapUtil.get().map
-        const feature = MapUtil.get().map.forEachFeatureAtPixel(e.pixel, f => f)
+        const map = Tool.get()
+        const feature = map.forEachFeatureAtPixel(e.pixel, f => f)
         const mapEle = map.getTargetElement()
 
         Events.pointerMoveOut(e)
@@ -99,8 +99,8 @@ export default abstract class Events {
             mapEle.style.cursor = 'pointer'
             Events.eventFeature = feature
             const func = feature?.get('pointerMoveIn')
-            const target = feature?.get('target') ?? {}
-            func?.(e, target)
+            const source = feature?.get('source') ?? {}
+            func?.(e, source)
         }
         else {
             mapEle.style.cursor = ''
@@ -113,8 +113,8 @@ export default abstract class Events {
     private static pointerMoveOut = (e: MapBrowserEvent<any>) => {
         if (Utils.isExist(Events.eventFeature)) {
             const func = Events.eventFeature?.get('pointerMoveOut')
-            const target = Events.eventFeature?.get('target')
-            func?.(e, target)
+            const source = Events.eventFeature?.get('source')
+            func?.(e, source)
             Events.eventFeature = undefined
         }
     }
