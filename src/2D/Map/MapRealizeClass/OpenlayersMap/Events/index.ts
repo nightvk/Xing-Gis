@@ -22,24 +22,24 @@ export default abstract class Events {
     public static init = () => {
         const map = Tool.get()
 
-        map.on('click', Events.singleClick)
-        map.on('dblclick', Events.doubleClick)
-        map.on('pointermove', Events.pointerMoveIn)
+        map.on('click', this.singleClick)
+        map.on('dblclick', this.doubleClick)
+        map.on('pointermove', this.pointerMoveIn)
         // @ts-ignore
-        map.on('contextmenu', Events.contextmenuClick)
+        map.on('contextmenu', this.contextmenuClick)
         map.on('movestart', () => {
-            Events.isMoveing = true;
+            this.isMoveing = true;
             Tool.menuOverlay.setElement(undefined)
         })
-        map.on('moveend', () => { Events.isMoveing = false })
+        map.on('moveend', () => { this.isMoveing = false })
     }
 
     /**
      * @desc 清理
      */
     public static clear = () => {
-        Events.isMoveing = false
-        Events.eventFeature = undefined
+        this.isMoveing = false
+        this.eventFeature = undefined
     }
 
     /**
@@ -86,18 +86,18 @@ export default abstract class Events {
      * @desc 移入
      */
     private static pointerMoveIn = (e: MapBrowserEvent<any>) => {
-        if (Events.isMoveing === true) {
+        if (this.isMoveing === true) {
             return false;
         }
         const map = Tool.get()
         const feature = map.forEachFeatureAtPixel(e.pixel, f => f)
         const mapEle = map.getTargetElement()
 
-        Events.pointerMoveOut(e)
+        this.pointerMoveOut(e)
 
         if (Utils.isExist(feature)) {
             mapEle.style.cursor = 'pointer'
-            Events.eventFeature = feature
+            this.eventFeature = feature
             const func = feature?.get('pointerMoveIn')
             const source = feature?.get('source') ?? {}
             func?.(e, source)
@@ -111,11 +111,11 @@ export default abstract class Events {
      * @desc 移出
      */
     private static pointerMoveOut = (e: MapBrowserEvent<any>) => {
-        if (Utils.isExist(Events.eventFeature)) {
-            const func = Events.eventFeature?.get('pointerMoveOut')
-            const source = Events.eventFeature?.get('source')
+        if (Utils.isExist(this.eventFeature)) {
+            const func = this.eventFeature?.get('pointerMoveOut')
+            const source = this.eventFeature?.get('source')
             func?.(e, source)
-            Events.eventFeature = undefined
+            this.eventFeature = undefined
         }
     }
 }

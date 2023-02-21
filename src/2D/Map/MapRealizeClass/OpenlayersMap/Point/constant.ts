@@ -41,8 +41,21 @@ export interface PointType {
     options?: PointOptionsType
 }
 
+/** 点的样式类型 */
+export interface PointStyleType {
+    /** 绘制为Icon的基本属性 */
+    icon?: Partial<IconOptions>
+    /** 绘制为点的基本属性 */
+    circle?: {
+        radius: number
+        fill: { color: string }
+        stroke: Partial<StrokeOptions>
+    } & Omit<CircleOptions, 'stroke' | 'fill' | 'radius'>
+    /** 自定义绘制样式 */
+    style?: Style
+}
 
-export interface PointOptionsType {
+export interface PointOptionsType extends PointStyleType {
     /** 图层 */
     layer?: PointLayerType
     /** 鼠标移入显示的标牌 */
@@ -54,16 +67,7 @@ export interface PointOptionsType {
         /** 显示内容 */
         text?: string
     }
-    /** 绘制为Icon的基本属性 */
-    icon?: Partial<IconOptions>
-    /** 绘制为点的基本属性 */
-    circle?: {
-        radius: number
-        fill: { color: string }
-        stroke: Partial<StrokeOptions>
-    } & Omit<CircleOptions, 'stroke' | 'fill' | 'radius'>
-    /** 自定义绘制样式 */
-    style?: Style
+
     /** 将原始数据缓存 */
     source?: Record<string, any>
     /** 是否激活 激活后会附带激活背景*/
@@ -72,12 +76,17 @@ export interface PointOptionsType {
     hoverActive?: boolean
     /** 事件 */
     events?: {
-        singleClick?: PointEventType
-        doubleClick?: PointEventType
         pointerMoveIn?: Function
         pointerMoveOut?: Function
+        singleClick?: PointEventType
+        doubleClick?: PointEventType
         contextmenuClick?: PointEventType
     }
 }
 
 
+
+
+export interface DrawPointOptionsType extends PointStyleType {
+    layer?: string
+}

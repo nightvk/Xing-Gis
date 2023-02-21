@@ -8,6 +8,14 @@ export default class Utils {
     }
 
     /**
+     * 参数是否不存在
+     * @param param 任意参数
+     */
+    static isNotExist = (param: any): boolean => {
+        return param === undefined || param === null
+    }
+
+    /**
      * 是否是函数
      * @param param 任意参数
      */

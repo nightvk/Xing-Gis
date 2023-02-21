@@ -68,6 +68,15 @@ export default class Point {
         this.feature.setStyle(new Style())
     }
 
+    /** 开启编辑状态 TODO */
+    public startEdit = (editEndCallback: (coordinate: [number, number]) => {}) => {
+
+    }
+
+    /** 退出编辑状态 TODO */
+    public endEdit = () => {
+
+    }
 
 
     /**  移入事件   */
@@ -133,7 +142,7 @@ export default class Point {
     }
 
 
-    /** 样式构建 (style > icon > circle ) */
+    /** 样式构建 (优先级:style > icon > circle ) */
     private getStyle = (): Style[] => {
         let styles: Style[] = []
         const { style, icon, circle, active } = this.options
@@ -178,7 +187,7 @@ export default class Point {
 }
 
 
-
+/** 单击双击右键的事件生成函数 */
 const generateEventFunc = (event: PointEventType | undefined, e: MapBrowserEvent<any>, target: Record<string, any>) => {
     return () => {
         if (!Utils.isExist(event)) {

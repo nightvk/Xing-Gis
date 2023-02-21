@@ -17,9 +17,7 @@ export default function Map2D() {
         MapController.tool.setOverviewMap(true)
         MapController.tool.setScaleLine(true)
 
-        const pointGather = MapController.point.createGather('airports')
-
-        pointGather.draw({
+        MapController.point.createGather('airports').draw({
             id: 1,
             name: '成都测试机场',
             coordinate: [104.06, 30.67],
@@ -31,6 +29,8 @@ export default function Map2D() {
             name: '散点',
             coordinate: [103.06, 30.67],
         })
+
+        MapController.point.draw({}, () => { })
 
     }, [])
 
