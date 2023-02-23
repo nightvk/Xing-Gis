@@ -9,7 +9,7 @@ import Layers from '../Layers'
 import Utils from '@/Utils'
 import type { PointOptionsType, PointType, PointEventType } from './constant'
 import type { LayerType } from '../Layers/index'
-import HoverAndSelectIcon from '../../../../images/hover_and_select_bkg.svg'
+import HoverAndSelectIcon from '../../../images/hover_and_select_bkg.svg'
 import Tool from '../Tool';
 import { GeoConstraint } from '@/2D/constraint'
 

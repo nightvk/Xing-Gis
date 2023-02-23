@@ -1,4 +1,4 @@
-import BaiduMapController from '../MapRealizeClass/BaiduMap/controller'
+import BaiduMapController from '../BaiduMap/controller'
 import OpenlayersController from '../MapRealizeClass/OpenlayersMap/controller'
 
 
