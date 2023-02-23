@@ -17,20 +17,45 @@ export default function Map2D() {
         MapController.tool.setOverviewMap(true)
         MapController.tool.setScaleLine(true)
 
-        MapController.point.createGather('airports').draw({
+
+        const { createGather, create, draw } = MapController.point
+
+
+        const airportGather = createGather('airports')
+
+        airportGather.draw({
             id: 1,
-            name: '成都测试机场',
+            name: 'Gather测试机场1',
             coordinate: [104.06, 30.67],
             options: { icon: { src: AirportIcon } }
         })
+        airportGather.draw({
+            id: 2,
+            name: 'Gather测试机场2',
+            coordinate: [104.06, 31.67],
+            options: { icon: { src: AirportIcon } }
+        })
 
-        MapController.point.create({
+        create({
             id: 9,
             name: '散点',
             coordinate: [103.06, 30.67],
+            // options: { icon: { src: AirportIcon } }
         })
 
-        MapController.point.draw({}, () => { })
+
+
+
+        draw.start({
+            initCoordinates: [[0, 0]],
+            pointerStyle: { icon: { src: AirportIcon } },
+            drawEndStyle: { icon: { src: AirportIcon } },
+        }, () => { })
+
+
+        setTimeout(() => {
+            draw.change([1, 1])
+        }, 2000)
 
     }, [])
 

@@ -82,4 +82,9 @@ export default class PointGather {
         this.layer.getSource()?.clear()
         this.store.clear()
     }
+
+    /** 获取所有点 */
+    public getList = ()=>{
+        return Array.from(this.store.values())
+    }
 }

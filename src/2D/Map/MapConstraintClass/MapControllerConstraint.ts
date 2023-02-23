@@ -2,7 +2,11 @@ import MapToolConstraint from './MapToolConstraint'
 
 interface geoGather {
     create: Function
-    draw: Function
+    draw: {
+        start: Function
+        end: Function
+        change: Function
+    }
     createGather: Function
 }
 

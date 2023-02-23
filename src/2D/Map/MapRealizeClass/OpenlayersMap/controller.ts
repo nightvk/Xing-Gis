@@ -34,8 +34,10 @@ export default class OpenlayersMapController extends MapControllerConstraint {
             }
             return new Point(_point)
         },
-        draw: (options: DrawPointOptionsType, drawEndCallback: Function) => {
-            PointDraw.draw(options, drawEndCallback)
+        draw: {
+            start: PointDraw.drawStart,
+            end: PointDraw.drawEnd,
+            change: PointDraw.drawChange,
         },
         createGather: (layerName: string, groupLayerName?: string) => {
             return new PointGather(layerName, groupLayerName)

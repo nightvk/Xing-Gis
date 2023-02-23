@@ -2,6 +2,7 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { Geometry, Point } from 'ol/geom'
 import { Style } from 'ol/style'
+import { Coordinate } from 'ol/coordinate';
 
 
 import type { Options as IconOptions } from 'ol/style/Icon'
@@ -47,9 +48,9 @@ export interface PointStyleType {
     icon?: Partial<IconOptions>
     /** 绘制为点的基本属性 */
     circle?: {
-        radius: number
-        fill: { color: string }
-        stroke: Partial<StrokeOptions>
+        radius?: number
+        fill?: { color: string }
+        stroke?: Partial<StrokeOptions>
     } & Omit<CircleOptions, 'stroke' | 'fill' | 'radius'>
     /** 自定义绘制样式 */
     style?: Style
@@ -87,6 +88,24 @@ export interface PointOptionsType extends PointStyleType {
 
 
 
-export interface DrawPointOptionsType extends PointStyleType {
+export interface DrawPointOptionsType {
     layer?: string
+    /** 基于初始位置绘制 */
+    initCoordinates?: Coordinate[]
+
+
+
+    /** 当type 为 LineString 时绘制为虚线 */
+    lineType?: 'dash'
+    /** 绘制的图形名称 */
+    name?: string;
+    /** 鼠标指针的样式 */
+    pointerStyle?: PointStyleType
+    /** 绘制结束图形的样式 */
+    drawEndStyle?: PointStyleType
+
+    /** 通用样式配置 */
+    fillColor?: string
+    strokeColor?: string
+    strokeWidth?: number
 }
