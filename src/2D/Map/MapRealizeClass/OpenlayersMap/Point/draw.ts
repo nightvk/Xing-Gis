@@ -6,8 +6,9 @@ import { fromLonLat } from 'ol/proj';
 
 import { DrawType } from '../Draws/constant'
 import Utils from '@/Utils';
+import { GeoDrawConstraint } from '@/2D/constraint';
 
-export default abstract class DrawPoint {
+export default abstract class DrawPoint extends GeoDrawConstraint {
     private static instance: Draws
     /** 绘制上图 */
     public static drawStart = (options: DrawPointOptionsType, drawEndCallback: Function) => {

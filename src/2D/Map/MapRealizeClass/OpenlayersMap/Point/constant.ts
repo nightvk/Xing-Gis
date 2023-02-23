@@ -94,7 +94,6 @@ export interface DrawPointOptionsType {
     initCoordinates?: Coordinate[]
 
 
-
     /** 当type 为 LineString 时绘制为虚线 */
     lineType?: 'dash'
     /** 绘制的图形名称 */

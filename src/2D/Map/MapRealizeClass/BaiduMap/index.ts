@@ -1,5 +1,4 @@
-import MapConstraint from "../../MapConstraintClass/MapConstraint";
-
-export default class BaiduMap extends MapConstraint {
+import { MapInstanceConstraint } from '@/2D/constraint'
+export default class BaiduMap implements MapInstanceConstraint {
 
 }

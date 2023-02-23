@@ -1,11 +1,11 @@
 import { Map as OlMap } from 'ol'
-import { MapMode } from '../../MapConstant'
-import MapConstraint from "../../MapConstraintClass/MapConstraint";
+import { MapMode } from '@/2D/constant'
 import Tool from './Tool'
 import Events from './Events'
 import LayerGroups from './Layers/group'
+import { MapInstanceConstraint } from '@/2D/constraint'
 
-export default class OpenlayersMap extends MapConstraint {
+export default class OpenlayersMap extends MapInstanceConstraint {
     public map!: OlMap // openlayers 实例
     private mapMode: MapMode = MapMode.REALTIME// 地图当前的模式
     private modeChangeIsClearLayers: boolean = false// 地图切换模式时是否清空图层
@@ -15,7 +15,6 @@ export default class OpenlayersMap extends MapConstraint {
         Tool.create(container, center, zoom)
         Tool.setOSMLayer()
         Tool.initOverlay()
-        Tool.changeIcon()
         Events.init()
     }
 

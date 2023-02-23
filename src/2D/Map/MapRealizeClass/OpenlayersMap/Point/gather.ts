@@ -5,8 +5,9 @@ import Point from './index'
 import type { LayerType } from '../Layers/index'
 import type { PointType } from './constant'
 import Utils from '@/Utils'
+import { GeoGatherConstraint } from '@/2D/constraint'
 
-export default class PointGather {
+export default class PointGather implements GeoGatherConstraint {
     private layer!: LayerType
     private store: Map<string | number, Point> = new Map()
 
@@ -36,9 +37,7 @@ export default class PointGather {
         }
     }
 
-    /**
-        * @desc 删除
-        */
+    /** 删除*/
     public remove = (id: string | number) => {
         const point = this.store.get(id)
         if (!Utils.isExist(point)) return
@@ -47,44 +46,34 @@ export default class PointGather {
         this.store.delete(id)
     }
 
-    /**
-    * @desc 找值
-    */
+    /** 找值 */
     public find = (id: string | number) => {
         return this.store.get(id)
     }
 
-    /**
-    * @desc 显示
-    */
+    /** 显示 */
     public show = (id: string | number) => {
         this.store.get(id)?.show()
     }
 
-    /**
-    * @desc 隐藏
-    */
+    /** 隐藏 */
     public hidden = (id: string | number) => {
         this.store.get(id)?.hidden()
     }
 
-    /**
-     * @desc 激活
-     */
+    /** 激活  */
     public active = (id: string | number) => {
         this.store.get(id)?.active()
     }
 
-    /**
-    * @desc 清空
-    */
+    /** 清空 */
     public clear = () => {
         this.layer.getSource()?.clear()
         this.store.clear()
     }
 
-    /** 获取所有点 */
-    public getList = ()=>{
+    /** 获取所有 */
+    public getList = () => {
         return Array.from(this.store.values())
     }
 }

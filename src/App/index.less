@@ -11,19 +11,34 @@ body,
 }
 
 .App {
-    .gis-mode {
+    .map-action {
+        z-index: 999;
         position: absolute;
-        right: 12px;
-        top: 12px;
-        background: transparent;
-        z-index: 99999;
-
-        .ant-select-selector {
-            background: transparent;
-
-            .ant-select-selection-item {
-                color: #fff;
-            }
+        right: 0;
+        top: 0;
+        min-width: 80px;
+        height: calc(100% - 20px);
+        padding: 10px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        >*{
+            margin-bottom: 6px;
         }
+    }
+
+}
+
+#map-2d {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+}
+
+.custom-toolTip {
+    div:first-child {
+        color: red;
+        margin-bottom: 6px;
     }
 }

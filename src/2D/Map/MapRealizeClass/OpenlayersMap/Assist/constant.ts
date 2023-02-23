@@ -1,4 +1,4 @@
-import { DEFAULT_MAP_CENTER as _DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM as _DEFAULT_MAP_ZOOM } from '../../../MapConstant/'
+import { DEFAULT_MAP_CENTER as _DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM as _DEFAULT_MAP_ZOOM } from '../../../../constant'
 
 
 export const DEFAULT_MAP_CENTER = _DEFAULT_MAP_CENTER

@@ -8,10 +8,9 @@ import OSM from 'ol/source/OSM'
 import { Fill, Stroke, Text } from 'ol/style'
 import { MousePosition, OverviewMap, ScaleLine } from 'ol/control'
 
-import MapToolConstraint from '../../../MapConstraintClass/MapToolConstraint'
 import { DEFAULT_MAP_PROJECTION, DEFAULT_MAP_SOURCE_PROJECTION, MAP_TILE_LAYER_NAME, } from '../Assist/constant'
 import { transformLonLat } from '../Assist/function'
-
+import { MapToolConstraint } from '@/2D/constraint'
 import Utils from '@/Utils'
 
 import './index.less'
@@ -82,11 +81,6 @@ export default abstract class Tool extends MapToolConstraint {
     /** 设置Map实例 */
     public static set = (map: OlMap) => {
         this.instance = map
-    }
-
-    /** 改变图标 */
-    public static changeIcon = () => {
-        console.log('此处改变图标!TODO');
     }
 
 

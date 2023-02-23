@@ -139,6 +139,7 @@ export default class Draws {
         // 存在初始坐标的情况下,初始化实例
         if (Utils.isExist(this.options?.initCoordinates)) {
             setTimeout(() => {
+                this.coordinates = this.options.initCoordinates!
                 this.interaction.appendCoordinates(this.options.initCoordinates!)
                 this.interaction.finishDrawing()
             }, 0)

@@ -9,13 +9,14 @@ import Layers from '../Layers'
 import Utils from '@/Utils'
 import type { PointOptionsType, PointType, PointEventType } from './constant'
 import type { LayerType } from '../Layers/index'
-import HoverAndSelectIcon from '../../../MapStaticResource/hover_and_select_bkg.svg'
+import HoverAndSelectIcon from '../../../../images/hover_and_select_bkg.svg'
 import Tool from '../Tool';
+import { GeoConstraint } from '@/2D/constraint'
 
 /**
  * 点
  */
-export default class Point {
+export default class Point implements GeoConstraint {
     public id: string | number = ''
     public name: string = ''
     public coordinate: [number, number] = [0, 0]
@@ -67,17 +68,6 @@ export default class Point {
     public hidden = () => {
         this.feature.setStyle(new Style())
     }
-
-    /** 开启编辑状态 TODO */
-    public startEdit = (editEndCallback: (coordinate: [number, number]) => {}) => {
-
-    }
-
-    /** 退出编辑状态 TODO */
-    public endEdit = () => {
-
-    }
-
 
     /**  移入事件   */
     private pointerMoveIn = (e: MapBrowserEvent<any>, target: Record<string, any>) => {
