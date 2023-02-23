@@ -19,7 +19,7 @@ export abstract class MapToolConstraint {
     /** 创建地图 */
     public abstract create: Function
     /** 销毁地图 */
-    public abstract destory: Function
+    public abstract destroy: Function
 
     /** 获取实例,建议所有获取地图实例都走此属性,以便于拦截 */
     public abstract get: () => any

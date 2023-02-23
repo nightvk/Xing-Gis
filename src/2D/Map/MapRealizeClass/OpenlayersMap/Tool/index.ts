@@ -56,7 +56,7 @@ export default abstract class Tool extends MapToolConstraint {
     }
 
     /** 销毁Map实例 */
-    public static destory = () => {
+    public static destroy = () => {
         this.instance.dispose();
         // @ts-ignore
         this.set(null)
