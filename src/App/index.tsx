@@ -60,7 +60,7 @@ function App() {
   const pointAction = {
     basicScatter: () => {
       const { create } = MapController!.Point
-      const coordinate = [103.06, 30.67] as [number, number]
+      const coordinate: [number, number] = [103.06, 30.67]
 
       create({
         id: 9,
@@ -72,7 +72,7 @@ function App() {
     },
     iconPoint: () => {
       const { create } = MapController!.Point
-      const coordinate = [104.06, 30.67] as [number, number]
+      const coordinate: [number, number] = [104.06, 30.67]
 
       create({
         id: 9,
@@ -89,7 +89,7 @@ function App() {
 
       airportGather = MapController!.Point.createGather('airports')!
 
-      const coordinate = [103.06, 29.67] as [number, number]
+      const coordinate: [number, number] = [103.06, 29.67]
 
       airportGather.draw({
         id: 1,
@@ -101,7 +101,7 @@ function App() {
       MapController!.Tool.flayTo(coordinate)
     },
     gatherEdit: () => {
-      const coordinate = [103.06, 29.67] as [number, number]
+      const coordinate: [number, number] = [103.06, 29.67]
 
       airportGather.draw({
         id: 1,// 只要id一致,即是修改
@@ -155,7 +155,7 @@ function App() {
     },
     pointTooltip: () => {
       const { create } = MapController!.Point
-      const coordinate = [108.06, 30.67] as [number, number]
+      const coordinate: [number, number] = [108.06, 30.67]
 
       create({
         id: 9,
@@ -177,7 +177,7 @@ function App() {
     },
     pointmenu: () => {
       const { create } = MapController!.Point
-      const coordinate = [109.06, 30.67] as [number, number]
+      const coordinate: [number, number] = [109.06, 30.67]
 
       create({
         id: 9,
