@@ -3,8 +3,8 @@ import { Button, message, Select, Menu, Dropdown } from 'antd'
 import './index.less'
 
 
-import MapControllerGenerator2D from '../2D/MapControllerGenerator'
-import type { MapControllerRes } from '../2D/MapControllerGenerator/constant'
+import MapControllerGenerator2D from '../2D/ControllerGenerator'
+import type { MapControllerRes } from '../2D/ControllerGenerator/constant'
 
 import Utils from '@/Utils'
 

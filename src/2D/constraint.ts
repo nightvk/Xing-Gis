@@ -1,6 +1,3 @@
-import { Feature } from "ol"
-import { Geometry } from "ol/geom"
-
 /** 2D 地图构造器的约束 */
 export abstract class MapControllerConstraint {
     /** 工具集 */
@@ -61,7 +58,7 @@ export abstract class GeoConstraint {
     public abstract id: string | number
     public abstract name: string
     public abstract coordinate: [number, number]
-    public abstract feature: Feature<Geometry>
+    public abstract feature: any
 
     /** 更新 */
     public abstract update: Function
