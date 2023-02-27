@@ -12,3 +12,6 @@ interface GeoAction {
         change: Function
     }
 }
+
+
+type Coordinate2D = [number, number]

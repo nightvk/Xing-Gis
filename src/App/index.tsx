@@ -32,7 +32,7 @@ function App() {
   }
 
   /** 地图工具 */
-  const MapTool = {
+  const MapTool: Record<string, Function> = {
     /** 设置网格线 */
     setGrid: () => {
       MapController!.Tool?.setGrid(true)
@@ -57,10 +57,10 @@ function App() {
   }
 
   /** 点操作 */
-  const pointAction = {
+  const pointAction: Record<string, Function> = {
     basicScatter: () => {
       const { create } = MapController!.Point
-      const coordinate: [number, number] = [103.06, 30.67]
+      const coordinate: Coordinate2D = [103.06, 30.67]
 
       create({
         id: 9,
@@ -72,7 +72,7 @@ function App() {
     },
     iconPoint: () => {
       const { create } = MapController!.Point
-      const coordinate: [number, number] = [104.06, 30.67]
+      const coordinate: Coordinate2D = [104.06, 30.67]
 
       create({
         id: 9,
@@ -89,7 +89,7 @@ function App() {
 
       airportGather = MapController!.Point.createGather('airports')!
 
-      const coordinate: [number, number] = [103.06, 29.67]
+      const coordinate: Coordinate2D = [103.06, 29.67]
 
       airportGather.draw({
         id: 1,
@@ -101,7 +101,7 @@ function App() {
       MapController!.Tool.flayTo(coordinate)
     },
     gatherEdit: () => {
-      const coordinate: [number, number] = [103.06, 29.67]
+      const coordinate: Coordinate2D = [103.06, 29.67]
 
       airportGather.draw({
         id: 1,// 只要id一致,即是修改
@@ -155,7 +155,7 @@ function App() {
     },
     pointTooltip: () => {
       const { create } = MapController!.Point
-      const coordinate: [number, number] = [108.06, 30.67]
+      const coordinate: Coordinate2D = [108.06, 30.67]
 
       create({
         id: 9,
@@ -177,7 +177,7 @@ function App() {
     },
     pointmenu: () => {
       const { create } = MapController!.Point
-      const coordinate: [number, number] = [109.06, 30.67]
+      const coordinate: Coordinate2D = [109.06, 30.67]
 
       create({
         id: 9,
@@ -238,7 +238,6 @@ function App() {
               { label: '设置图层2-TODO', key: 'TODO2' },
               { label: '设置图层3-TODO', key: 'TODO3' },
             ],
-            // @ts-ignore
             onClick: ({ key }) => MapTool[key]?.()
           }}
           disabled={!MapController}
@@ -266,7 +265,6 @@ function App() {
               { label: '绘制中修改坐标', key: 'drawChangePoint' },
               { label: '结束绘制', key: 'drawend' },
             ],
-            // @ts-ignore
             onClick: ({ key }) => pointAction[key]?.()
           }}
           disabled={!MapController}
