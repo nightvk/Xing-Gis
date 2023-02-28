@@ -151,7 +151,7 @@ export default class Point implements GeoConstraint {
             styles.push(new Style({
                 image: new Circle({
                     ...circle,
-                    fill: new Fill({ color: fill?.color ?? 'red' }),
+                    fill: new Fill({ color: fill ?? 'red' }),
                     stroke: new Stroke({ ...(stroke ?? {}) }),
                     radius
                 })

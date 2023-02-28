@@ -191,8 +191,16 @@ function App() {
             singleClick: {
               className: '菜单类名',
               menus: [
-                { label: '菜单1', click: () => { } },
-                { label: '菜单2', click: () => { } },
+                {
+                  label: '菜单1', click: () => {
+                    console.log('点击了菜单1')
+                  }
+                },
+                {
+                  label: '菜单2', click: () => {
+                    console.log('点击了菜单2')
+                  }
+                },
               ]
             }
           }
@@ -214,14 +222,14 @@ function App() {
           onChange={setMode}
           options={[
             { label: '2D', value: '2D' },
-            { label: '3D', value: '3D' },
+            { label: '3D-TODO', value: '3D' },
           ]}
         />
         <Select
           placeholder='请初始化地图'
           onChange={initMap}
           options={[
-            { label: 'baidu地图', value: 'baidu' as MapType },
+            { label: 'baidu地图-TODO', value: 'baidu' as MapType },
             { label: 'openlayers地图', value: 'openlayers' as MapType },
           ]}
         />

@@ -280,7 +280,7 @@ const getInteractionDefaultStyle = (options: DrawsOptionsType): Style => {
             return new Style({
                 image: new CircleStyle({
                     ...pointerStyle.circle,
-                    fill: new Fill({ color: fill?.color ?? 'red' }),
+                    fill: new Fill({ color: fill ?? 'red' }),
                     stroke: new Stroke({ ...(stroke ?? {}) }),
                     radius
                 })
@@ -336,7 +336,7 @@ const getDrawEndDefauleStyle = (options: DrawsOptionsType): Style => {
             return new Style({
                 image: new CircleStyle({
                     ...drawEndStyle.circle,
-                    fill: new Fill({ color: fill?.color ?? 'red' }),
+                    fill: new Fill({ color: fill ?? 'red' }),
                     stroke: new Stroke({ ...(stroke ?? {}) }),
                     radius
                 })

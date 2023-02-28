@@ -49,7 +49,7 @@ export interface PointStyleType {
     /** 绘制为点的基本属性 */
     circle?: {
         radius?: number
-        fill?: { color: string }
+        fill?: string
         stroke?: Partial<StrokeOptions>
     } & Omit<CircleOptions, 'stroke' | 'fill' | 'radius'>
     /** 自定义绘制样式 */
