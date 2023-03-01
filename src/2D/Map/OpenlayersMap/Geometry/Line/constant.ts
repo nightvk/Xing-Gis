@@ -24,7 +24,9 @@ export interface LineType {
 interface BaseStyleType {
     lineStyle?: {
         stroke?: Partial<StrokeOptions>
-        text?: Partial<TextOptions>
+        text?: Partial<Omit<TextOptions, 'fill'>> & {
+            fill: string,
+        }
     },
     nodeStyle?: Omit<PointStyleType, 'text'>,
 }
@@ -81,7 +83,7 @@ export interface DrawLineOptionsType {
     /** 绘制时鼠标指针的样式 */
     pointerStyle?: PointStyleType
     /** 绘制结束图形的样式 */
-    drawEndStyle?: LineStyleType
+    drawEndStyle?: BaseStyleType
 
     /** 通用样式配置 */
     fillColor?: string

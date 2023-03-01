@@ -50,10 +50,10 @@ export default class OpenlayersMapController implements MapControllerConstraint 
             }
         }),
         draw: {
-            start: PointDraw.drawStart,
-            end: PointDraw.drawEnd,
-            change: PointDraw.drawChange,
+            start: LineDraw.drawStart,
+            end: LineDraw.drawEnd,
+            change: LineDraw.drawChange,
         },
-        createGather: (layerName: string, groupLayerName?: string) => new PointGather(layerName, groupLayerName)
+        createGather: (layerName: string, groupLayerName?: string) => new LineGather(layerName, groupLayerName)
     }
 }

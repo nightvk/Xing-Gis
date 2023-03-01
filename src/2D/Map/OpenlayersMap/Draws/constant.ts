@@ -1,6 +1,6 @@
 import { Style } from "ol/style"
 import { Coordinate } from 'ol/coordinate';
-import { PointStyleType } from '../Point/constant'
+import { PointStyleType } from '../Geometry/Point/constant'
 
 
 
@@ -28,7 +28,7 @@ export interface DrawsOptionsType {
     /** 鼠标指针的样式 */
     pointerStyle?: PointStyleType
     /** 绘制结束图形的样式 */
-    drawEndStyle?: PointStyleType
+    drawEndStyle?: any
 
     /** 通用样式配置 */
     fillColor?: string

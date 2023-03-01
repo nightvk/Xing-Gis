@@ -142,7 +142,7 @@ export default class Draws {
                 this.coordinates = this.options.initCoordinates!
                 this.interaction.appendCoordinates(this.options.initCoordinates!)
                 this.interaction.finishDrawing()
-            }, 0)
+            }, 100)
         }
 
         this.interaction.on('drawend', evt => {
@@ -307,7 +307,7 @@ const getInteractionDefaultStyle = (options: DrawsOptionsType): Style => {
     })
 }
 
-/** 获取绘制结束时显示在地图上的默认样式 */
+/** 获取绘制结束时显示在地图上的默认样式 */    // TODO 需要根据类型 区分 并且 DrawsOptionsType 需要优化
 const getDrawEndDefauleStyle = (options: DrawsOptionsType): Style => {
     const {
         fillColor = 'rgba(255,204,51,0.2)',

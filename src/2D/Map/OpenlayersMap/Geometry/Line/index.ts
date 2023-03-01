@@ -1,7 +1,7 @@
 
 import { Feature } from 'ol'
 import { LineString, Point } from 'ol/geom'
-import { Style, Fill, Stroke, Text } from 'ol/style'
+import { Style, Fill, Stroke, Text, Icon, Circle } from 'ol/style'
 import { fromLonLat } from 'ol/proj'
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 
@@ -163,10 +163,7 @@ export default class Line implements GeoConstraint {
         // 节点样式
         if (Utils.isExist(nodeStyle)) {
             this.feature.getGeometry()?.forEachSegment((start, end) => {
-                styles.push(new Style({
-                    geometry: new Point(end),
-                    ...nodeStyle
-                }))
+                styles.push(getNodeStyle(nodeStyle, new Point(end)))
             })
         }
 
@@ -204,10 +201,7 @@ export default class Line implements GeoConstraint {
             // 节点样式
             if (Utils.isExist(nodeStyle)) {
                 this.feature.getGeometry()?.forEachSegment((start, end) => {
-                    styles.push(new Style({
-                        geometry: new Point(end),
-                        ...nodeStyle
-                    }))
+                    styles.push(getNodeStyle(nodeStyle, new Point(end)))
                 })
             }
 
@@ -281,10 +275,38 @@ const getBaseLineStyle = (param: {
     if (showName !== false) {
         lineStyleOptions.text = new Text({
             text: name,
-            fill: new Fill({ color }),
             ...text,
+            fill: new Fill({ color: text?.fill ?? color }),
         })
     }
 
     return new Style(lineStyleOptions)
+}
+
+// 构建节点的基本样式
+const getNodeStyle = (nodeStyle: any, geometry: any): Style => {
+    const { style, circle, icon } = nodeStyle
+    if (Utils.isExist(style)) {
+        style as Style
+        style.setGeometry(geometry)
+        return style
+    }
+    else if (Utils.isExist(icon)) {
+        return new Style({
+            geometry,
+            image: new Icon({ ...icon }),
+        })
+    }
+    else {// 默认画圆
+        const { fill, stroke, radius = 4 } = circle ?? {}
+        return new Style({
+            geometry,
+            image: new Circle({
+                ...circle,
+                fill: new Fill({ color: fill ?? 'red' }),
+                stroke: new Stroke({ ...(stroke ?? {}) }),
+                radius
+            }),
+        })
+    }
 }
