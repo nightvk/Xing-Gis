@@ -1,4 +1,5 @@
 import BaiduMap from './index'
+import {MapControllerConstraint} from '@/2D/constraint'
 
 export default class BaiduMapController implements MapControllerConstraint {
 
@@ -18,4 +19,13 @@ export default class BaiduMapController implements MapControllerConstraint {
             change: () => { },
         },
     }
+    public Line = {
+        create: () => { },
+        createGather: () => { },
+        draw: {
+            start: () => { },
+            end: () => { },
+            change: () => { },
+        },
+    } 
 }

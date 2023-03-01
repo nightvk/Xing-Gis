@@ -232,9 +232,8 @@ export default class Draws {
         if (!isDeep) {
             if (Boolean(this.coordinates)) coordinates = toLonLat(this.coordinates as Coordinate);
         } else {
-            const tmpArr: Coordinate[] | Coordinate[][] = this.coordinates as
-                | Coordinate[]
-                | Coordinate[][];
+            const tmpArr = this.coordinates as Coordinate[] | Coordinate[][];
+
             coordinates = tmpArr?.map((co) => {
                 const isTwoDeep = co.some((c) => c instanceof Array);
                 if (!isTwoDeep) {

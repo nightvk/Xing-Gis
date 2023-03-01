@@ -1,10 +1,10 @@
 
-import Draws from '../Draws'
+import Draws from '../../Draws'
 import { DrawPointOptionsType } from './constant'
 import { Point } from 'ol/geom';
 import { fromLonLat } from 'ol/proj';
 
-import { DrawType } from '../Draws/constant'
+import { DrawType } from '../../Draws/constant'
 import Utils from '@/Utils';
 import { GeoDrawConstraint } from '@/2D/constraint';
 

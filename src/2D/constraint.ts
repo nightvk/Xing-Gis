@@ -1,11 +1,12 @@
 /** 2D 地图构造器的约束 */
 export abstract class MapControllerConstraint {
+    public abstract instance: MapInstanceConstraint
     /** 工具集 */
     public abstract Tool: MapToolConstraint
     /** 点的相关操作 */
     public abstract Point: GeoAction
-
-    public abstract instance: MapInstanceConstraint
+    /** 线的相关操作 */
+    public abstract Line: GeoAction
 }
 /** 2D 地图实例 约束 */
 export abstract class MapInstanceConstraint {
@@ -57,7 +58,7 @@ export abstract class GeoGatherConstraint {
 export abstract class GeoConstraint {
     public abstract id: string | number
     public abstract name: string
-    public abstract coordinate: [number, number]
+    public abstract coordinate: [number, number] | [number, number][]
     public abstract feature: any
 
     /** 更新 */

@@ -1,18 +1,18 @@
 
 import { Feature } from 'ol'
 import { Point as OlPoint } from 'ol/geom'
-import { Style, Icon, Circle, Fill, Stroke } from 'ol/style'
+import { Style, Icon, Circle, Fill, Stroke, Text } from 'ol/style'
 import { fromLonLat } from 'ol/proj'
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 
-import Layers from '../Layers'
 import Utils from '@/Utils'
-import type { PointOptionsType, PointType, PointEventType } from './constant'
-import type { LayerType } from '../Layers/index'
-import HoverAndSelectIcon from '../../../images/hover_and_select_bkg.svg'
-import Tool from '../Tool';
-import { GeoConstraint } from '@/2D/constraint'
+import Layers from '../../Layers'
+import HoverAndSelectIcon from '../../../../images/hover_and_select_bkg.svg'
+import Tool from '../../Tool';
 
+import type { GeoConstraint } from '@/2D/constraint'
+import type { PointOptionsType, PointType, PointEventType } from './constant'
+import type { LayerType } from '../../Layers/index'
 /**
  * 点
  */
@@ -113,9 +113,25 @@ export default class Point implements GeoConstraint {
 
     /** 初始化实例 */
     private initPoint = () => {
+
+        // 图层初始化
+        const layer = this.options.layer
+        if (Utils.isExist(layer)) {
+            const _layer = typeof layer === 'string' ? Layers.create(layer) : layer
+            this.layer = _layer
+        }
+
+        // 删除旧实例
+        const source = this.layer?.getSource()
+        const oldFeature = source?.getFeatureById(this.id)
+        if (Utils.isExist(oldFeature)) {
+            source?.removeFeature(oldFeature)
+        }
+
         const geometry = new OlPoint(fromLonLat(this.coordinate))
         this.feature.setGeometry(geometry)
         this.feature.setStyle(this.getStyle())
+        this.feature.setId(this.id)
         this.feature.set('source', this.options.source)
         this.feature.set('pointerMoveIn', this.pointerMoveIn)
         this.feature.set('pointerMoveOut', this.pointerMoveOut)
@@ -123,28 +139,34 @@ export default class Point implements GeoConstraint {
         this.feature.set('doubleClick', this.doubleClick)
         this.feature.set('contextmenuClick', this.contextmenuClick)
 
-        const layer = this.options.layer
-        if (Utils.isExist(layer)) {
-            const _layer = typeof layer === 'string' ? Layers.create(layer) : layer
-            this.layer = _layer
-            _layer.getSource()?.addFeature(this.feature)
-        }
+        this.layer?.getSource()?.addFeature(this.feature)
     }
 
 
     /** 样式构建 (优先级:style > icon > circle ) */
     private getStyle = (): Style[] => {
         let styles: Style[] = []
-        const { style, icon, circle, active } = this.options
+        const { style, icon, circle, text, active = false, showName = false } = this.options
+
+        let textOptions: any = {}
+        if (showName === true) {
+            textOptions = {
+                text: new Text({
+                    text: this.name,
+                    ...text,
+                    fill: text?.fill ?? new Fill({ color: '#000' }),
+                })
+            }
+        }
 
         if (Utils.isExist(style)) {
             styles.push(style)
         }
         else if (Utils.isExist(icon)) {
             styles.push(new Style({
-                image: new Icon({ ...icon })
+                image: new Icon({ ...icon }),
+                ...textOptions
             }))
-
         }
         else {// 默认画圆
             const { fill, stroke, radius = 4 } = circle ?? {}
@@ -154,10 +176,12 @@ export default class Point implements GeoConstraint {
                     fill: new Fill({ color: fill ?? 'red' }),
                     stroke: new Stroke({ ...(stroke ?? {}) }),
                     radius
-                })
+                }),
+                ...textOptions
             }))
         }
 
+        // 激活样式
         if (active === true) {
             styles.push(this.getHoverStyle())
         }
@@ -205,7 +229,6 @@ const generateEventFunc = (event: PointEventType | undefined, e: MapBrowserEvent
                 menuEle.addEventListener('click', () => {
                     menu.click?.(e, target)
                     Tool.menuOverlay.setElement(undefined)
-
                 })
                 ele.appendChild(menuEle)
             })

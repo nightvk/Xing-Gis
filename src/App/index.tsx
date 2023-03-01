@@ -3,14 +3,10 @@ import { Button, message, Select, Menu, Dropdown } from 'antd'
 import './index.less'
 
 
-import MapControllerGenerator2D from '../2D/ControllerGenerator'
-import type { MapControllerRes } from '../2D/ControllerGenerator/constant'
-
-import Utils from '@/Utils'
-
-import AirportIcon from '../2D/images/airport.png'
-import PointGather from '../2D/Map/OpenlayersMap/Point/gather'
-
+import MapControllerGenerator2D from '@/2D/ControllerGenerator'
+import AirportIcon from '@/2D/images/airport.png'
+import PointGather from '@/2D/Map/OpenlayersMap/Geometry/Point/gather'
+import type { MapControllerRes } from '@/2D/ControllerGenerator/constant'
 
 let airportGather: PointGather
 
@@ -210,6 +206,30 @@ function App() {
     },
   }
 
+  /** 线操作 */
+  const LineAction: Record<string, Function> = {
+    basicLine: () => {
+      const { create } = MapController!.Line
+      const coordinate: Coordinate2D[] = [[0, 0], [0, 1], [1, 1]]
+
+      create({
+        id: 1,
+        name: '基本线条',
+        coordinate,
+        options: {
+          showName: true,
+          hoverActive: true,
+          lineStyle: {
+            stroke: {
+              color: 'green'
+            }
+          }
+        }
+      })
+      MapController!.Tool.flayTo(coordinate[0])
+    },
+  }
+
 
   return (
     <div className="App">
@@ -280,6 +300,31 @@ function App() {
           <Button>点操作</Button>
         </Dropdown>
 
+        {/* 线操作 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '基本线条', key: 'basicLine' },
+              { label: '自定义样式线条TODO', key: 'customStyleLine' },
+              { label: '带菜单的线TODO', key: 'pointmenu' },
+              { label: '线集-新增点TODO', key: 'gatherAdd' },
+              // { label: '点集-修改点', key: 'gatherEdit' },
+              // { label: '点集-显示点', key: 'gatherShow' },
+              // { label: '点集-隐藏点', key: 'gatherHidden' },
+              // { label: '点集-删除点', key: 'gatherRemove' },
+              // { label: '点集-清空点', key: 'gatherClear' },
+              // { label: '基本绘制', key: 'drawPoint' },
+              // { label: '有初始坐标的绘制', key: 'drawInitPoint' },
+              // { label: '绘制为图标', key: 'drawIconPoint' },
+              // { label: '绘制中修改坐标', key: 'drawChangePoint' },
+              // { label: '结束绘制', key: 'drawend' },
+            ],
+            onClick: ({ key }) => LineAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button>线操作</Button>
+        </Dropdown>
       </div>
     </div >
   )

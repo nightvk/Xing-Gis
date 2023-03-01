@@ -8,6 +8,7 @@ import { Coordinate } from 'ol/coordinate';
 import type { Options as IconOptions } from 'ol/style/Icon'
 import type { Options as StrokeOptions } from 'ol/style/Stroke'
 import type { Options as CircleOptions } from 'ol/style/Circle'
+import type { Options as TextOptions } from 'ol/style/Text'
 
 
 /** 散点的图层名 */
@@ -44,6 +45,8 @@ export interface PointType {
 
 /** 点的样式类型 */
 export interface PointStyleType {
+    /** 绘制name的属性 */
+    text?: Partial<TextOptions>
     /** 绘制为Icon的基本属性 */
     icon?: Partial<IconOptions>
     /** 绘制为点的基本属性 */
@@ -75,6 +78,8 @@ export interface PointOptionsType extends PointStyleType {
     active?: boolean
     /** 鼠标移入是否开启激活状态 */
     hoverActive?: boolean
+    /** 上图时,是否展示名字 默认不展示 */
+    showName?: boolean
     /** 事件 */
     events?: {
         pointerMoveIn?: Function
