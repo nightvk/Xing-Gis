@@ -7,6 +7,7 @@ import MapControllerGenerator2D from '@/2D/ControllerGenerator'
 import AirportIcon from '@/2D/images/airport.png'
 import type { MapControllerRes } from '@/2D/ControllerGenerator/constant'
 import { GeoGatherConstraint } from '@/2D/constraint'
+import { Icon, Stroke, Style } from 'ol/style'
 
 type modeType = '2D' | '3D'
 
@@ -151,7 +152,13 @@ function App() {
       const { start } = MapController!.Point.draw
       start({
         pointerStyle: { icon: { src: AirportIcon } },
-        drawEndStyle: { icon: { src: AirportIcon } },
+        drawEndStyle: () => {
+          return new Style({
+            image: new Icon({
+              src: AirportIcon
+            })
+          })
+        },
       }, (e: any) => {
         console.log('e', e)
       })
@@ -328,15 +335,46 @@ function App() {
     },
     drawInitLine: () => {
       const { start } = MapController!.Line.draw
+      const initCoordinates = [[1, 1], [0.19, -1.5]]
       start({
-        initCoordinates: [[-8, 0], [-10, 1], [-7, 0]],
+        initCoordinates,
       }, (e: any) => {
+        MapController!.Tool.flayTo(initCoordinates[0])
         console.log('e', e)
       })
     },
-    drawStyleLine: () => { },
-    drawChangeLine: () => { },
-    drawend: () => { },
+    drawStyleLine: () => {
+      const { start } = MapController!.Line.draw
+      start({
+        pointerStyle: {
+          circle: {
+            fill: 'red',
+            radius: 10
+          }
+        },
+        drawEndStyle: () => {
+          return new Style({
+            stroke: new Stroke({
+              color: 'red',
+              width: 4
+            })
+          })
+        },
+      }, (e: any) => {
+        console.log('e', e)
+      })
+
+
+    },
+    drawChangeLine: () => {
+      const { change } = MapController!.Line.draw
+      change([[1, 3], [1, 4], [2, 5]])
+      MapController!.Tool.flayTo([1, 3])
+    },
+    drawend: () => {
+      const { end } = MapController!.Line.draw
+      end()
+    },
   }
 
 
@@ -422,10 +460,10 @@ function App() {
               { label: '线集-删除线条', key: 'gatherRemove', disabled: !lineGather },
               { label: '线集-清空线条', key: 'gatherClear', disabled: !lineGather },
               { label: '基本绘制', key: 'drawLine' },
-              { label: '有初始坐标的绘制TODO', key: 'drawInitLine' },
-              { label: '自定义样式的绘制TODO', key: 'drawStyleLine' },
-              { label: '绘制中修改坐标TODO', key: 'drawChangeLine' },
-              { label: '结束绘制TODO', key: 'drawend' },
+              { label: '有初始坐标的绘制', key: 'drawInitLine' },
+              { label: '自定义样式的绘制', key: 'drawStyleLine' },
+              { label: '绘制中修改坐标', key: 'drawChangeLine' },
+              { label: '结束绘制', key: 'drawend' },
             ],
             onClick: ({ key }) => LineAction[key]?.()
           }}

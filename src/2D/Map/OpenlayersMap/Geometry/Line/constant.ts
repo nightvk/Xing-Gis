@@ -1,7 +1,8 @@
 
 import { Coordinate } from 'ol/coordinate';
-import { PointStyleType } from '../Point/constant'
+import { Style } from "ol/style"
 
+import type { PointStyleType } from '../Point/constant'
 import type { Options as StrokeOptions } from 'ol/style/Stroke'
 import type { Options as TextOptions } from 'ol/style/Text'
 import type { GeometryEventType, GeometryLayerType } from '../constant'
@@ -83,7 +84,7 @@ export interface DrawLineOptionsType {
     /** 绘制时鼠标指针的样式 */
     pointerStyle?: PointStyleType
     /** 绘制结束图形的样式 */
-    drawEndStyle?: BaseStyleType
+    drawEndStyle?: () => Style | Style[]
 
     /** 通用样式配置 */
     fillColor?: string

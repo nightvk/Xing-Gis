@@ -24,6 +24,11 @@ export default class Utils {
     }
 
     /**
+    * 是否是数组
+    */
+    static isArray = Array.isArray
+
+    /**
     * 空函数
     */
     static emptyFunc = () => { }

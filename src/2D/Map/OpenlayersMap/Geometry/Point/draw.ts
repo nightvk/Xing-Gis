@@ -8,6 +8,7 @@ import { DrawType } from '../../Draws/constant'
 import Utils from '@/Utils';
 import { GeoDrawConstraint } from '@/2D/constraint';
 
+
 export default abstract class DrawPoint extends GeoDrawConstraint {
     private static instance: Draws
     /** 绘制上图 */
@@ -17,9 +18,7 @@ export default abstract class DrawPoint extends GeoDrawConstraint {
             type: 'Point' as DrawType,
         }
 
-        const DrawInstance = new Draws(drawOptions, drawEndCallback)
-
-        this.instance = DrawInstance
+        this.instance = new Draws(drawOptions, drawEndCallback)
     }
 
     /** 绘制结束 */

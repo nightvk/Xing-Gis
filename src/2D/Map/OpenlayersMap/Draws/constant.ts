@@ -20,15 +20,14 @@ export interface DrawsOptionsType {
     initCoordinates?: Coordinate[]
 
 
-
     /** 当type 为 LineString 时绘制为虚线 */
     lineType?: 'dash'
     /** 绘制的图形名称 */
     name?: string;
-    /** 鼠标指针的样式 */
+    /** 绘制时鼠标指针的样式 */
     pointerStyle?: PointStyleType
     /** 绘制结束图形的样式 */
-    drawEndStyle?: any
+    drawEndStyle?: () => Style | Style[]
 
     /** 通用样式配置 */
     fillColor?: string

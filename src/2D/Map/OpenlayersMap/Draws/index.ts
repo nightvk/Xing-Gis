@@ -3,7 +3,7 @@ import { Fill, Stroke, Style, Circle as CircleStyle, Text, Icon, } from 'ol/styl
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { createBox, createRegularPolygon } from 'ol/interaction/Draw';
 import { Coordinate } from 'ol/coordinate';
-import { Circle as CircleGeo, LineString, Point, Polygon } from 'ol/geom';
+import { Circle as CircleGeo, LineString, Point, Polygon, Geometry } from 'ol/geom';
 
 import {
     DRAW_DEFAULT_LAYERNAME,
@@ -20,6 +20,9 @@ import Tool from '../Tool';
 
 type CoordinateType = Coordinate | Coordinate[] | Coordinate[][]
 
+/**
+ * 几何图形绘制类
+ */
 export default class Draws {
     /** 绘制类型 */
     public type: DrawType
@@ -38,6 +41,7 @@ export default class Draws {
     /** 吸附对齐 */
     public snap!: Snap
     private snapLayer!: LayerType
+
     /** 实例 */
     public feature: Feature
 
@@ -139,59 +143,76 @@ export default class Draws {
         // 存在初始坐标的情况下,初始化实例
         if (Utils.isExist(this.options?.initCoordinates)) {
             setTimeout(() => {
-                this.coordinates = this.options.initCoordinates!
-                this.interaction.appendCoordinates(this.options.initCoordinates!)
-                this.interaction.finishDrawing()
-            }, 100)
+                let geometry: Geometry
+                const coordinates = this.options.initCoordinates!
+
+                if (this.type === 'Point') {
+                    geometry = new Point(fromLonLat(coordinates[0]))
+                }
+                if (this.type === 'LineString') {
+                    geometry = new LineString(coordinates.map(i => fromLonLat(i)))
+                }
+
+                this.drawEndEvt({ feature: new Feature({ geometry: geometry! }) })
+
+            }, 0)
         }
 
-        this.interaction.on('drawend', evt => {
-            const geo = evt?.feature?.getGeometry()
-            if (!Utils.isExist(geo)) return
-
-            const map = Tool.get()
-            map.removeInteraction(this.interaction)
-
-
-            let coordinates: CoordinateType = [];
-
-            if (geo instanceof CircleGeo) {
-                this.options = {
-                    ...this.options,
-                    center: geo?.getCenter(),
-                    radius: geo?.getRadius()
-                }
-            } else if (
-                geo instanceof Point ||
-                geo instanceof LineString ||
-                geo instanceof Polygon
-            ) {
-                coordinates = geo?.getCoordinates();
-            }
-
-            let style: Style[] = [getDrawEndDefauleStyle(this.options)]
-
-            if (this.type === 'Arrow') {
-                style.push(getArrowStyle(coordinates as Coordinate[], this.options))
-            }
-
-            this.feature = evt.feature
-            this.feature.setStyle(style)
-            this.feature.on('change', (evt) => {
-                if (this.type === 'Arrow') {
-                    this.changeStyle(evt.target.getGeometry().getCoordinates());
-                }
-            })
-
-            this.modifyLayer.getSource()?.clear()
-            this.modifyLayer.getSource()?.addFeature(this.feature)
-
-            this.snapLayer.getSource()?.clear()
-            this.snapLayer.getSource()?.addFeature(this.feature)
-
-            this.drawEndCallback?.(this.getDrawInfo())
-        })
+        this.interaction.on('drawend', this.drawEndEvt)
     }
+
+
+    /** 绘制结束回调 */
+    private drawEndEvt = (evt: any) => {
+        const geo = evt?.feature?.getGeometry()
+        if (!Utils.isExist(geo)) return
+
+        const map = Tool.get()
+        map.removeInteraction(this.interaction)
+
+        let coordinates: CoordinateType = [];
+
+        if (geo instanceof CircleGeo) {
+            this.options = {
+                ...this.options,
+                center: geo?.getCenter(),
+                radius: geo?.getRadius()
+            }
+        } else if (geo instanceof Point) {
+            this.coordinates = [geo?.getCoordinates()]
+        } else if (geo instanceof LineString) {
+            this.coordinates = geo?.getCoordinates()
+        } else if (geo instanceof Polygon) {
+            this.coordinates = geo?.getCoordinates()
+        }
+
+        let style: Style[] =
+            Utils.isFunction(this.options.drawEndStyle) ?
+                [this.options.drawEndStyle()].flat() :
+                getDrawEndDefauleStyle(this.options)
+
+        if (this.type === 'Arrow') {
+            style.push(getArrowStyle(coordinates as Coordinate[], this.options))
+        }
+
+        this.feature = evt.feature
+        this.feature.setStyle(style)
+
+        this.feature.on('change', (evt) => {
+            if (this.type === 'Arrow') {
+                this.changeStyle(evt.target.getGeometry().getCoordinates());
+            }
+        })
+
+        this.modifyLayer.getSource()?.clear()
+        this.modifyLayer.getSource()?.addFeature(this.feature)
+
+        this.snapLayer.getSource()?.clear()
+        this.snapLayer.getSource()?.addFeature(this.feature)
+
+        this.drawEndCallback?.(this.getDrawInfo())
+    }
+
 
     /** 箭头样式改变回调 */
     private changeStyle = (coordinates: Coordinate[]) => {
@@ -222,9 +243,7 @@ export default class Draws {
         this.modifyLayer.dispose()
         this.snapLayer.dispose()
     }
-    /**
-      * @description 获取绘制图形的信息
-      */
+    /** 获取绘制图形的信息 */
     public getDrawInfo = () => {
         const { name, center, radius } = this.options
         let coordinates: any = [];
@@ -256,27 +275,31 @@ export default class Draws {
 
 
 /** 获取绘制器默认样式 */
-const getInteractionDefaultStyle = (options: DrawsOptionsType): Style => {
+const getInteractionDefaultStyle = (options: DrawsOptionsType): Style[] => {
     const {
         lineType,
         pointerStyle,
     } = options
 
+    let pointer: Style
+    let line: Style
+
+    // 绘制时点的样式
     if (Utils.isExist(pointerStyle)) {
         pointerStyle!
         if (Utils.isExist(pointerStyle.style)) {
-            return pointerStyle.style;
+            pointer = pointerStyle.style;
         }
 
         if (Utils.isExist(pointerStyle.icon)) {
-            return new Style({
+            pointer = new Style({
                 image: new Icon({ ...pointerStyle.icon })
             })
         }
 
         if (Utils.isExist(pointerStyle.circle)) {
             const { fill, stroke, radius = 4 } = pointerStyle.circle ?? {}
-            return new Style({
+            pointer = new Style({
                 image: new CircleStyle({
                     ...pointerStyle.circle,
                     fill: new Fill({ color: fill ?? 'red' }),
@@ -285,8 +308,17 @@ const getInteractionDefaultStyle = (options: DrawsOptionsType): Style => {
                 })
             })
         }
+    } else {
+        pointer = new Style({
+            image: new CircleStyle({
+                radius: 6,
+                stroke: new Stroke({ color: 'rgba(0, 0, 0, 0.7)', }),
+                fill: new Fill({ color: 'rgba(255, 255, 255, 0.2)', }),
+            })
+        })
     }
 
+    // 绘制时线条的样式
     let strokeOptions: any = {
         color: 'rgba(255, 255, 255, 0.5)',
         width: 1,
@@ -295,80 +327,59 @@ const getInteractionDefaultStyle = (options: DrawsOptionsType): Style => {
     if (lineType === 'dash') {
         strokeOptions.lineDash = [10, 10]
     }
-
-    return new Style({
+    line = new Style({
         fill: new Fill({ color: 'rgba(255, 255, 255, 0.2)', }),
         stroke: new Stroke(strokeOptions),
-        image: new CircleStyle({
-            radius: 6,
-            stroke: new Stroke({ color: 'rgba(0, 0, 0, 0.7)', }),
-            fill: new Fill({ color: 'rgba(255, 255, 255, 0.2)', }),
-        }),
     })
+
+
+    return [pointer!, line]
 }
 
-/** 获取绘制结束时显示在地图上的默认样式 */    // TODO 需要根据类型 区分 并且 DrawsOptionsType 需要优化
-const getDrawEndDefauleStyle = (options: DrawsOptionsType): Style => {
+/** 获取绘制结束时显示在地图上的默认样式 */
+const getDrawEndDefauleStyle = (options: DrawsOptionsType): Style[] => {
     const {
         fillColor = 'rgba(255,204,51,0.2)',
         strokeColor = 'rgba(255,204,51,0.8)',
         strokeWidth = 1,
         lineType,
         name,
-        drawEndStyle
+        type,
     } = options
 
-    if (Utils.isExist(drawEndStyle)) {
-        drawEndStyle!
-        if (Utils.isExist(drawEndStyle.style)) {
-            return drawEndStyle.style;
-        }
-
-        if (Utils.isExist(drawEndStyle.icon)) {
-            return new Style({
-                image: new Icon({ ...drawEndStyle.icon })
-            })
-        }
-
-        if (Utils.isExist(drawEndStyle.circle)) {
-            const { fill, stroke, radius = 4 } = drawEndStyle.circle ?? {}
-            return new Style({
-                image: new CircleStyle({
-                    ...drawEndStyle.circle,
-                    fill: new Fill({ color: fill ?? 'red' }),
-                    stroke: new Stroke({ ...(stroke ?? {}) }),
-                    radius
-                })
-            })
-        }
-    }
-
-    let strokeOptions: any = {
-        color: strokeColor,
-        width: strokeWidth,
-    }
-
-    if (lineType === 'dash') { strokeOptions.lineDash = [10, 10] }
-
-    let styleOptions: any = {
-        fill: new Fill({ color: fillColor }),
-        stroke: new Stroke(strokeOptions),
-        image: new CircleStyle({
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor }),
-            radius: 5,
-        }),
-    }
+    let styleOptions: Record<string, any> = {}
 
     if (Utils.isExist(name)) {
         styleOptions.text = new Text({
             text: name,
             fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor }),
             font: '16px sans-serif',
         })
     }
-    return new Style(styleOptions)
+
+    // 点显示的默认样式
+    if (type === 'Point') {
+        styleOptions.image = new CircleStyle({
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({ color: strokeColor }),
+            radius: 5,
+        })
+    }
+
+    // 线显示的默认样式
+    if (type === 'LineString') {
+        let strokeOptions: Record<string, any> = {
+            width: strokeWidth,
+            color: strokeColor
+        }
+        if (lineType === 'dash') {
+            strokeOptions.lineDash = [10, 10]
+        }
+
+        styleOptions.stroke = new Stroke(strokeOptions)
+    }
+
+    return [new Style(styleOptions)]
 }
 
 

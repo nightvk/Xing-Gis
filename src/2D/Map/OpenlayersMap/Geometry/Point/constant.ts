@@ -106,7 +106,7 @@ export interface DrawPointOptionsType {
     /** 鼠标指针的样式 */
     pointerStyle?: PointStyleType
     /** 绘制结束图形的样式 */
-    drawEndStyle?: PointStyleType
+    drawEndStyle?: () => Style | Style[]
 
     /** 通用样式配置 */
     fillColor?: string
