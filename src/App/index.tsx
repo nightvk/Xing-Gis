@@ -683,16 +683,16 @@ function App() {
           menu={{
             items: [
               { label: '矩形-TODO', key: '1' },
-              { label: '矩形集-TODO', key: '1' },
+              { label: '矩形集-TODO', key: '11' },
               { label: '矩形绘制-TODO', key: '2' },
               { label: '圆形-TODO', key: '3' },
-              { label: '圆形集-TODO', key: '3' },
+              { label: '圆形集-TODO', key: '31' },
               { label: '圆形绘制-TODO', key: '4' },
               { label: '扇形-TODO', key: '5' },
-              { label: '扇形集-TODO', key: '5' },
+              { label: '扇形集-TODO', key: '51' },
               { label: '扇形绘制-TODO', key: '6' },
               { label: '自定义图形-TODO', key: '7' },
-              { label: '自定义图形集-TODO', key: '7' },
+              { label: '自定义图形集-TODO', key: '71' },
               { label: '自定义图形绘制-TODO', key: '8' },
             ],
             onClick: ({ key }) => PolygonAction[key]?.()
@@ -710,14 +710,41 @@ function App() {
           menu={{
             items: [
               { label: '路径规划-TODO', key: '1' },
-              { label: '路径动画-TODO', key: '1' },
-              { label: '贝塞尔曲线-TODO', key: '1' },
+              { label: '路径动画-TODO', key: '2' },
             ],
             // onClick: ({ key }) => PolygonAction[key]?.()
           }}
           disabled={!MapController}
         >
           <Button >路径规划-TODO</Button>
+        </Dropdown>
+
+        {/* 测量 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '直线测量-TODO', key: '1' },
+              { label: '路径测量-TODO', key: '2' },
+              { label: '面积测量-TODO', key: '3' },
+            ],
+            // onClick: ({ key }) => PolygonAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button >测量-TODO</Button>
+        </Dropdown>
+
+        {/* 其他 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '贝塞尔曲线-TODO', key: '1' },
+            ],
+            // onClick: ({ key }) => PolygonAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button >其他-TODO</Button>
         </Dropdown>
 
         {/* 热力图 */}
