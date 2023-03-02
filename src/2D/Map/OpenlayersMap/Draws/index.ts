@@ -62,8 +62,8 @@ export default class Draws {
 
         this.feature = new Feature()
 
-        this.initModify()
         this.initSnap()
+        this.initModify()
         this.initInteraction()
     }
 

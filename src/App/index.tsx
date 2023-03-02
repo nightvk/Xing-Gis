@@ -677,6 +677,51 @@ function App() {
         >
           <Button>多边形操作</Button>
         </Dropdown>
+
+        {/* 其余图形操作 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '矩形-TODO', key: '1' },
+              { label: '矩形集-TODO', key: '1' },
+              { label: '矩形绘制-TODO', key: '2' },
+              { label: '圆形-TODO', key: '3' },
+              { label: '圆形集-TODO', key: '3' },
+              { label: '圆形绘制-TODO', key: '4' },
+              { label: '扇形-TODO', key: '5' },
+              { label: '扇形集-TODO', key: '5' },
+              { label: '扇形绘制-TODO', key: '6' },
+              { label: '自定义图形-TODO', key: '7' },
+              { label: '自定义图形集-TODO', key: '7' },
+              { label: '自定义图形绘制-TODO', key: '8' },
+            ],
+            onClick: ({ key }) => PolygonAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button title='简单描述,详细操作与点线多边形基本相同,均实现了同一约束类的所有抽象方法'>其余图形操作-TODO</Button>
+        </Dropdown>
+
+        {/* 热力图 */}
+        <Button disabled={!MapController}>热力图-TODO</Button>
+
+        {/* 路径规划 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '路径规划-TODO', key: '1' },
+              { label: '路径动画-TODO', key: '1' },
+              { label: '贝塞尔曲线-TODO', key: '1' },
+            ],
+            // onClick: ({ key }) => PolygonAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button >路径规划-TODO</Button>
+        </Dropdown>
+
+        {/* 热力图 */}
+        <Button disabled={!MapController}>动态目标-TODO</Button>
       </div>
     </div >
   )
