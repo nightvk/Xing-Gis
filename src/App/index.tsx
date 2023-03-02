@@ -19,6 +19,9 @@ function App() {
   const [pointGather, setPointGather] = useState<GeoGatherConstraint | undefined>(undefined)
   // 线集
   const [lineGather, setLineGather] = useState<GeoGatherConstraint | undefined>(undefined)
+  // 多边形集合
+  const [polygonGather, setPolygonGather] = useState<GeoGatherConstraint | undefined>(undefined)
+
 
 
 
@@ -377,6 +380,181 @@ function App() {
     },
   }
 
+  /** 多边形操作 */
+  const PolygonAction: Record<string, Function> = {
+    basicPolygon: () => {
+      const { create } = MapController!.Polygon
+      const coordinate: Coordinate2D[] = [[0, 0], [0, 1], [1, 1]]
+
+      create({
+        id: 1,
+        name: '基本多边形',
+        coordinate,
+      })
+      MapController!.Tool.flayTo(coordinate[0])
+    },
+    customStylePolygon: () => {
+      const { create } = MapController!.Polygon
+      const coordinate: Coordinate2D[] = [[1, 1], [1, 2], [2, 2]]
+
+      create({
+        id: 2,
+        name: '自定义样式多边形',
+        coordinate,
+        options: {
+          showName: true,
+          hoverActive: true,
+          lineStyle: {
+            fill: 'blue',
+            stroke: {
+              color: 'green',
+              width: 2,
+              lineDash: [6, 4]
+            },
+            text: {
+              fill: 'red'
+            }
+          },
+          nodeStyle: {
+            circle: {
+              radius: 6,
+              fill: '#000',
+              stroke: {
+                color: '#fff',
+                width: 3
+              }
+            }
+          },
+          activeStyle: {
+            lineStyle: {
+              fill: "#fff",
+              stroke: {
+                color: '#eee',
+                width: 1,
+              },
+              text: {
+                fill: '#ccc'
+              }
+            }
+          },
+          toolTip: {
+            text: '这是自定义样式多边形的自定义toolTip'
+          }
+        }
+      })
+      MapController!.Tool.flayTo(coordinate[0])
+    },
+    menuPolygon: () => {
+      const { create } = MapController!.Polygon
+      const coordinate: Coordinate2D[] = [[-1, 0], [0, 1], [0, 0]]
+
+      create({
+        id: 3,
+        name: '带菜单的多边形',
+        coordinate,
+        options: {
+          source: {
+            id: 3,
+            desc: '这是多边形的原始数据',
+          },
+          events: {
+            singleClick: {
+              menus: [
+                {
+                  label: '菜单1', click: (e: any, source: any) => {
+                    console.log('点击了菜单1', e, source)
+                  }
+                },
+              ]
+            }
+          }
+        }
+      })
+      MapController!.Tool.flayTo(coordinate[0])
+    },
+    gatherAdd: () => {
+      let polygonGather = MapController!.Polygon.createGather('basePolygon')!
+      const coordinate: Coordinate2D[] = [[-10, 0], [-10, 1], [-9, 0]]
+
+      polygonGather!.draw({
+        id: 5,
+        name: '多边形集-多边形1',
+        coordinate,
+      })
+      setPolygonGather(polygonGather)
+
+      MapController!.Tool.flayTo(coordinate[0])
+    },
+    gatherEdit: () => {
+      const coordinate: Coordinate2D[] = [[-8, 0], [-10, 1], [-7, 0]]
+
+      polygonGather!.draw({
+        id: 5,// 只要id一致,即是修改
+        name: '多边形集-多边形1-修改',
+        coordinate,
+      })
+    },
+    gatherRemove: () => {
+      polygonGather!.remove(5)
+    },
+    gatherClear: () => {
+      polygonGather!.clear()
+    },
+    gatherShow: () => {
+      polygonGather!.show(5)
+    },
+    gatherHidden: () => {
+      polygonGather!.hidden(5)
+    },
+    drawPolygon: () => {
+      const { start } = MapController!.Polygon.draw
+      start({}, (e: any) => {
+        console.log('e', e)
+      })
+    },
+    drawInitPolygon: () => {
+      const { start } = MapController!.Polygon.draw
+      const initCoordinates = [[1, 1], [0.19, -1.5], [2, 2]]
+      start({
+        initCoordinates,
+      }, (e: any) => {
+        MapController!.Tool.flayTo(initCoordinates[0])
+        console.log('e', e)
+      })
+    },
+    drawStylePolygon: () => {
+      const { start } = MapController!.Polygon.draw
+      start({
+        pointerStyle: {
+          circle: {
+            fill: 'red',
+            radius: 10
+          }
+        },
+        drawEndStyle: () => {
+          return new Style({
+            stroke: new Stroke({
+              color: 'red',
+              width: 4
+            })
+          })
+        },
+      }, (e: any) => {
+        console.log('e', e)
+      })
+
+
+    },
+    drawChangePolygon: () => {
+      const { change } = MapController!.Polygon.draw
+      change([[1, 3], [1, 4], [2, 5]])
+      MapController!.Tool.flayTo([1, 3])
+    },
+    drawend: () => {
+      const { end } = MapController!.Polygon.draw
+      end()
+    },
+  }
 
   return (
     <div className="App">
@@ -453,6 +631,7 @@ function App() {
               { label: '基本线条', key: 'basicLine' },
               { label: '自定义样式线条', key: 'customStyleLine' },
               { label: '带菜单的线', key: 'menuLine' },
+              { label: '带箭头的线-TODO', key: 'arrowLine' },
               { label: '线集-新增线条', key: 'gatherAdd' },
               { label: '线集-修改线条', key: 'gatherEdit', disabled: !lineGather },
               { label: '线集-显示线条', key: 'gatherShow', disabled: !lineGather },
@@ -460,6 +639,7 @@ function App() {
               { label: '线集-删除线条', key: 'gatherRemove', disabled: !lineGather },
               { label: '线集-清空线条', key: 'gatherClear', disabled: !lineGather },
               { label: '基本绘制', key: 'drawLine' },
+              { label: '绘制带箭头的线-TODO', key: 'drawArrowLine' },
               { label: '有初始坐标的绘制', key: 'drawInitLine' },
               { label: '自定义样式的绘制', key: 'drawStyleLine' },
               { label: '绘制中修改坐标', key: 'drawChangeLine' },
@@ -470,6 +650,32 @@ function App() {
           disabled={!MapController}
         >
           <Button>线操作</Button>
+        </Dropdown>
+
+        {/* 多边形操作 */}
+        <Dropdown
+          menu={{
+            items: [
+              { label: '基本多边形', key: 'basicPolygon' },
+              { label: '自定义样式多边形', key: 'customStylePolygon' },
+              { label: '带菜单的多边形', key: 'menuPolygon' },
+              { label: '多边形集-新增多边形', key: 'gatherAdd' },
+              { label: '多边形集-修改多边形', key: 'gatherEdit', disabled: !polygonGather },
+              { label: '多边形集-显示多边形', key: 'gatherShow', disabled: !polygonGather },
+              { label: '多边形集-隐藏多边形', key: 'gatherHidden', disabled: !polygonGather },
+              { label: '多边形集-删除多边形', key: 'gatherRemove', disabled: !polygonGather },
+              { label: '多边形集-清空', key: 'gatherClear', disabled: !polygonGather },
+              { label: '基本绘制', key: 'drawPolygon' },
+              { label: '有初始坐标的绘制', key: 'drawInitPolygon' },
+              { label: '自定义样式的绘制', key: 'drawStylePolygon' },
+              { label: '绘制中修改坐标', key: 'drawChangePolygon' },
+              { label: '结束绘制', key: 'drawend' },
+            ],
+            onClick: ({ key }) => PolygonAction[key]?.()
+          }}
+          disabled={!MapController}
+        >
+          <Button>多边形操作</Button>
         </Dropdown>
       </div>
     </div >

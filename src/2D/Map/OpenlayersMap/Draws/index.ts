@@ -152,6 +152,9 @@ export default class Draws {
                 if (this.type === 'LineString') {
                     geometry = new LineString(coordinates.map(i => fromLonLat(i)))
                 }
+                if (this.type === 'Polygon') {
+                    geometry = new Polygon([coordinates.map(i => fromLonLat(i))])
+                }
 
                 this.drawEndEvt({ feature: new Feature({ geometry: geometry! }) })
 
@@ -178,12 +181,14 @@ export default class Draws {
                 center: geo?.getCenter(),
                 radius: geo?.getRadius()
             }
-        } else if (geo instanceof Point) {
+        }
+        // 将坐标统一成 [[number,number]] 格式,方便上层应用使用
+        else if (geo instanceof Point) {
             this.coordinates = [geo?.getCoordinates()]
         } else if (geo instanceof LineString) {
             this.coordinates = geo?.getCoordinates()
         } else if (geo instanceof Polygon) {
-            this.coordinates = geo?.getCoordinates()
+            this.coordinates = geo?.getCoordinates()?.[0]
         }
 
         let style: Style[] =
@@ -367,7 +372,11 @@ const getDrawEndDefauleStyle = (options: DrawsOptionsType): Style[] => {
     }
 
     // 线显示的默认样式
-    if (type === 'LineString') {
+    if (
+        type === 'LineString' ||
+        type === 'Polygon'
+
+    ) {
         let strokeOptions: Record<string, any> = {
             width: strokeWidth,
             color: strokeColor

@@ -1,6 +1,6 @@
 
 import { Feature } from 'ol'
-import { LineString, Point } from 'ol/geom'
+import { Polygon as OlPolygon, Point } from 'ol/geom'
 import { Style, Fill, Stroke, Text, Icon, Circle } from 'ol/style'
 import { fromLonLat } from 'ol/proj'
 import MapBrowserEvent from 'ol/MapBrowserEvent';
@@ -10,40 +10,40 @@ import Utils from '@/Utils'
 import Tool from '../../Tool';
 
 import type { GeoConstraint } from '@/2D/constraint'
-import type { LineOptionsType, LineType } from './constant'
+import type { PolygonOptionsType, PolygonType } from './constant'
 import type { GeometryEventType } from '../constant'
 import type { LayerType } from '../../Layers/index'
 
 /**
  * 线
  */
-export default class Line implements GeoConstraint {
+export default class Polygon implements GeoConstraint {
     public id: string | number = ''
     public name: string = ''
     public coordinate!: [number, number][]
-    public feature: Feature<LineString> = new Feature()
+    public feature: Feature<OlPolygon> = new Feature()
 
-    private options: LineOptionsType = {}
+    private options: PolygonOptionsType = {}
     private layer!: LayerType
 
-    constructor(line: LineType) {
-        const { id, name, coordinate, options } = line
+    constructor(polygon: PolygonType) {
+        const { id, name, coordinate, options } = polygon
         this.id = id ?? name ?? Utils.getUuid()
         this.name = name ?? id
         this.coordinate = coordinate
         this.options = options ?? {}
-        this.initLine()
+        this.initPolygon()
     }
 
 
     /** 更新 */
-    public update = (param: LineType) => {
+    public update = (param: PolygonType) => {
         const { id, name, coordinate, options } = param
         this.id = id ?? name
         this.name = name
         this.coordinate = coordinate
         this.options = options ?? {}
-        this.initLine()
+        this.initPolygon()
         return this
     }
 
@@ -113,7 +113,7 @@ export default class Line implements GeoConstraint {
     }
 
     /** 初始化实例 */
-    private initLine = () => {
+    private initPolygon = () => {
 
         // 图层初始化
         const layer = this.options.layer
@@ -129,7 +129,7 @@ export default class Line implements GeoConstraint {
             source?.removeFeature(oldFeature)
         }
 
-        const geometry = new LineString(this.coordinate.map(i => fromLonLat(i)))
+        const geometry = new OlPolygon([this.coordinate.map(i => fromLonLat(i))])
         this.feature.setGeometry(geometry)
         this.feature.setStyle(this.getStyle())
         this.feature.setId(this.id)
@@ -162,8 +162,8 @@ export default class Line implements GeoConstraint {
 
         // 节点样式
         if (Utils.isExist(nodeStyle)) {
-            this.feature.getGeometry()?.forEachSegment((_, end) => {
-                styles.push(getNodeStyle(nodeStyle, new Point(end)))
+            this.coordinate.forEach(i => {
+                styles.push(getNodeStyle(nodeStyle, new Point(fromLonLat(i))))
             })
         }
 
@@ -200,8 +200,8 @@ export default class Line implements GeoConstraint {
 
             // 节点样式
             if (Utils.isExist(nodeStyle)) {
-                this.feature.getGeometry()?.forEachSegment((start, end) => {
-                    styles.push(getNodeStyle(nodeStyle, new Point(end)))
+                this.coordinate.forEach(i => {
+                    styles.push(getNodeStyle(nodeStyle, new Point(i)))
                 })
             }
 
@@ -261,10 +261,12 @@ const getBaseLineStyle = (param: {
     const { lineStyle, name, lineColor, showName } = param
     const stroke = lineStyle?.stroke
     const text = lineStyle?.text
+    const fill = lineStyle?.fill ?? 'rgba(255,255,255,0.1)'
 
     const color = lineColor ?? stroke?.color ?? '#000000'
 
     let lineStyleOptions: Record<string, any> = {
+        fill: new Fill({ color: fill }),
         stroke: new Stroke({
             ...stroke,
             color,

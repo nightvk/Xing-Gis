@@ -14,6 +14,10 @@ import LineDraw from './Geometry/Line/draw'
 import Line from './Geometry/Line/index'
 import { LineType, SPLASHES_LINE_DEFAULT_LAYERNAME } from './Geometry/Line/constant'
 
+import PolygonGather from './Geometry/Polygon/gather'
+import PolygonDraw from './Geometry/Polygon/draw'
+import Polygon from './Geometry/Polygon/index'
+import { PolygonType, SPLASHES_POLYGON_DEFAULT_LAYERNAME } from './Geometry/Polygon/constant'
 
 export default class OpenlayersMapController implements MapControllerConstraint {
     constructor(container: HTMLElement, center: [number, number], zoom: number) {
@@ -55,5 +59,22 @@ export default class OpenlayersMapController implements MapControllerConstraint 
             change: LineDraw.drawChange,
         },
         createGather: (layerName: string, groupLayerName?: string) => new LineGather(layerName, groupLayerName)
+    }
+
+    /** 多边形的相关操作 */
+    public Polygon = {
+        create: (polygon: PolygonType) => new Polygon({
+            ...polygon,
+            options: {
+                layer: SPLASHES_POLYGON_DEFAULT_LAYERNAME,
+                ...polygon.options,
+            }
+        }),
+        draw: {
+            start: PolygonDraw.drawStart,
+            end: PolygonDraw.drawEnd,
+            change: PolygonDraw.drawChange,
+        },
+        createGather: (layerName: string, groupLayerName?: string) => new PolygonGather(layerName, groupLayerName)
     }
 }

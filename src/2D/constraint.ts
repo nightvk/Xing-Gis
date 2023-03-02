@@ -7,6 +7,8 @@ export abstract class MapControllerConstraint {
     public abstract Point: GeoAction
     /** 线的相关操作 */
     public abstract Line: GeoAction
+    /** 多边形的相关操作 */
+    public abstract Polygon: GeoAction
 }
 /** 2D 地图实例 约束 */
 export abstract class MapInstanceConstraint {
